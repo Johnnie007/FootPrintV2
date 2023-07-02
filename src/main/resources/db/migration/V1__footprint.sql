@@ -22,7 +22,7 @@ create table vehicle(
 create table home(
     id int auto_increment,
     homeType varChar(10),
-    sqft int
+    homeSize int
     userId int,
         primary key(id),
         FOREIGN Key (userId)
