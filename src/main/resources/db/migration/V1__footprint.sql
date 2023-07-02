@@ -3,36 +3,35 @@ CREATE table user(
     first_name varChar(30),
     last_name varChar(30),
     email varChar(20),
-    password varChar(20)
-    footprint varChar(30),
+    footprint int(30),
     lifeStyle varChar(40),
     primary key(id)
 );
 
-create table vehicle(
+CREATE TABLE vehicle(
     id int auto_increment,
-    type varChar(10).
-    mpg DECIMAL(3, 2) NOT NULL,
+    type varChar(10),
+    mpg varChar(5),
     userId int,
     primary key(id),
     FOREIGN Key (userId)
-        REFERENCES user(Id)
+        REFERENCES user(id)
 );
 
-create table home(
+CREATE TABLE home(
     id int auto_increment,
     homeType varChar(10),
-    homeSize int
+    homeSize int,
     userId int,
-        primary key(id),
-        FOREIGN Key (userId)
-            REFERENCES user(Id)
+    primary key(id),
+    FOREIGN Key (userId)
+        REFERENCES user(id)
 );
 
-create table recommendationList(
+CREATE TABLE recommendationList(
     id int auto_increment,
     type varChar(15),
     product varChar(30),
     productLocation varChar(30),
     primary key(id)
-)
+);

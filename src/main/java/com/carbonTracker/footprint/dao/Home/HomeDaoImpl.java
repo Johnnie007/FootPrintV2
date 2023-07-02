@@ -3,9 +3,10 @@ package com.carbonTracker.footprint.dao.Home;
 import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.home.HomeRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public class HomeDaoImpl implements HomeDao{
 
     JdbcTemplate jdbcTemplate;
