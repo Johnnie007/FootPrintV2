@@ -10,53 +10,53 @@ public class RecommendationList {
     private int id;
 
     @NotBlank
-    @JsonProperty("plants")
-    private String plants;
+    @JsonProperty("type")
+    private String type;
 
     @NotBlank
-    @JsonProperty("energy")
-    private String energy;
+    @JsonProperty("product")
+    private String product;
 
     @NotBlank
-    @JsonProperty("goods")
-    private String goods;
+    @JsonProperty("productLocation")
+    private String productLocation;
 
-    public RecommendationList(int id, String plants, String energy, String goods ){
+    public RecommendationList(int id, String type, String product, String productLocation){
         this.id = id;
-        this.plants = plants;
-        this.energy = energy;
-        this.goods = goods;
+        this.type = type;
+        this.product = product;
+        this.productLocation = productLocation;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getEnergy() {
-        return energy;
+    public String getType() {
+        return type;
     }
 
-    public String getGoods() {
-        return goods;
+    public String getProduct() {
+        return product;
     }
 
-    public String getPlants() {
-        return plants;
+    public String getProductLocation() {
+        return productLocation;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setEnergy(String energy) {
-        this.energy = energy;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public void setPlants(String plants) {
-        this.plants = plants;
+    public void setProduct(String product) {
+        this.product = product;
     }
 
-    public void setGoods(String goods) {
-        this.goods = goods;
+    public void setProductLocation(String productLocation) {
+        this.productLocation = productLocation;
     }
 }
