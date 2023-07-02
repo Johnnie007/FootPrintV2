@@ -23,16 +23,16 @@ public class UserDaoImpl implements UserDao {
     @Override
     public int addUser(User user){
         String sql = """
-                INSERT into user(first_name, last_name, email, diet, lifeStyle)
+                INSERT into user(first_name, last_name, email, footPrint, lifeStyle)
                 VALUES (?,?,?,?,?)
                 """;
-        return jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getDiet(), user.getLifeStyle());
+        return jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getFootPrint(), user.getLifeStyle());
     }
 
     @Override
     public List<User> findAllUsers() {
         String sql = """
-                SELECT id, first_name, last_name, email, diet, lifeStyle
+                SELECT *
                 FROM user
                 LIMIT 100;
                 """;
@@ -42,7 +42,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional <User> findUserById(int id){
         String sql = """
-                SELECT id, first_name, last_name, email, diet, lifeStyle
+                SELECT id, first_name, last_name, email, footPrint, lifeStyle
                 FROM user
                 WHERE id = ?;
                 """;
@@ -55,11 +55,11 @@ public class UserDaoImpl implements UserDao {
     public int updateUser(int id, User user ){
         String sql = """
                 UPDATE user
-                SET first_name = ?, last_name = ?, email = ?, diet = ?, lifeStyle = ?
+                SET first_name = ?, last_name = ?, email = ?, footPrint = ?, lifeStyle = ?
                 WHERE id = ?;
                 """;
 
-        return jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getDiet(), user.getLifeStyle(),id);
+        return jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getFootPrint(), user.getLifeStyle(),id);
     }
 
     @Override
@@ -69,5 +69,19 @@ public class UserDaoImpl implements UserDao {
                 WHERE id = ?;
                 """;
         return jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public List <User> getUserFootPrint(int id){
+        String sql = """
+                SELECT * 
+                FROM user u
+                INNER JOIN vehicles v
+                   ON u.id = v.userId
+                INNER JOIN home h
+                    on u.id = h.userId
+                WHERE id = ?
+                """;
+        return jdbcTemplate.query(sql, new UserRowMapper(), id );
     }
 }

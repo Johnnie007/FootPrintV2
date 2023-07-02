@@ -25,16 +25,17 @@ public class User {
     private String lifeStyle;
 
     @NotBlank
-    @JsonProperty("diet")
-    private String diet;
+    @JsonProperty("footPrint")
+    private int footPrint;
+    //TODO add Password variable;
 
-    public User(int id, String firstName, String lastName, String email, String lifeStyle, String diet){
+    public User(int id, String firstName, String lastName, String email, String lifeStyle, int footPrint){
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.lifeStyle = lifeStyle;
-        this.diet = diet;
+        this.footPrint = footPrint;
     }
     public int getId(){
         return id;
@@ -67,12 +68,13 @@ public class User {
     public void setEmail(){
         this.email= email;
     }
-    public String getDiet() {
-        return diet;
+
+    public int  getFootPrint() {
+        return footPrint;
     }
 
-    public void setDiet(String diet) {
-        this.diet = diet;
+    public void setFootPrint(String diet) {
+        this.footPrint = footPrint;
     }
 
     public String getLifeStyle() {
@@ -90,7 +92,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", lifestyle='" + lifeStyle + '\'' +
-                ", diet='" + diet + '\'' +
+                ", footPrint='" + footPrint + '\'' +
                 '}';
     }
 }
