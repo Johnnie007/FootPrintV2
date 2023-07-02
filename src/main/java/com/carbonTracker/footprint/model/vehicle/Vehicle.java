@@ -8,23 +8,20 @@ public class Vehicle {
     @JsonProperty("id")
     int id;
     @NotBlank
-    @JsonProperty("make")
-    String make;
+    @JsonProperty("type")
+    String type;
     @NotBlank
-    @JsonProperty("model")
-    String model;
+    @JsonProperty("mpg")
+    double mpg;
 
-    @JsonProperty("year")
-    int year;
 
     @JsonProperty("userId")
     int userId;
 
-    public Vehicle(int id, String make, String model, int year, int userId){
+    public Vehicle(int id, String type, double mpg, int userId){
         this.id = id;
-        this.make = make;
-        this.model = model;
-        this.year = year;
+        this.type= type;
+        this.mpg = mpg;
         this.userId = userId;
     }
 
@@ -32,20 +29,24 @@ public class Vehicle {
         return id;
     }
 
-    public String getMake() {
-        return make;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public int getYear(){
-        return year;
-    }
-
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public double getMpg() {
+        return mpg;
+    }
+
+    public void setMpg(String model) {
+        this.mpg = mpg;
     }
 
     public int getUserId() {
@@ -56,25 +57,12 @@ public class Vehicle {
        return this.userId = userId;
     }
 
-    public void setMake(String make) {
-        this.make = make;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
     @Override
     public String toString() {
         return "Vehicle{" +
                 "id=" + id +
-                ", make='" + make + '\'' +
-                ", model='" + model + '\'' +
-                ", year=" + year +
+                ", make='" + type + '\'' +
+                ", model='" + mpg + '\'' +
                 ", userId=" + userId +
                 '}';
     }

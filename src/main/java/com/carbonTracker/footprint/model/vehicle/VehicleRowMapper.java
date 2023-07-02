@@ -12,9 +12,8 @@ public class VehicleRowMapper implements RowMapper <Vehicle> {
     public Vehicle mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new Vehicle(
                 rs.getInt("id"),
-                rs.getString("make"),
-                rs.getString("model"),
-                rs.getInt("vehicleYear"),
+                rs.getString("type"),
+                rs.getDouble("mpg"),
                 rs.getInt("userId")
         );
     }
