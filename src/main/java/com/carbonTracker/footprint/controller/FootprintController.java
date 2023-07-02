@@ -1,4 +1,5 @@
 package com.carbonTracker.footprint.controller;
+import com.carbonTracker.footprint.dao.Home.HomeDao;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDao;
 import com.carbonTracker.footprint.model.user.User;
@@ -18,11 +19,13 @@ public class FootprintController {
 
     private final UserDao userDao;
     private final VehicleDao vehicleDao;
+    private final HomeDao homeDao;
 
     @Autowired
-    public FootprintController(UserDao userDao, VehicleDao vehicleDao){
+    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao){
         this.userDao = userDao;
         this.vehicleDao = vehicleDao;
+        this.homeDao = homeDao;
     }
 
     @PostMapping("/add")

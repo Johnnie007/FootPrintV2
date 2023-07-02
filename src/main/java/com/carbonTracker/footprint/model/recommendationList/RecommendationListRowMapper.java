@@ -11,9 +11,9 @@ public class RecommendationListRowMapper implements RowMapper<RecommendationList
     public RecommendationList mapRow(ResultSet rs, int rowNum) throws SQLException{
         return new RecommendationList(
                 rs.getInt("id"),
-                rs.getNString("energy"),
-                rs.getNString("goods"),
-                rs.getNString("plants")
+                rs.getNString("type"),
+                rs.getNString("product"),
+                rs.getNString("productLocation")
         );
     }
 }
