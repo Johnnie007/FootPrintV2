@@ -24,7 +24,7 @@ public class VehicleDaoImpl implements VehicleDao{
     public int addUserVehicle(Vehicle vehicle, int id){
         String sql = """
                 INSERT into vehicle(type, mpg, userId)
-                VALUES(?,?,?, ?)
+                VALUES(?,?,?)
                 """;
         return jdbcTemplate.update(sql, vehicle.getType(), vehicle.getMpg(), id);
     }
@@ -33,7 +33,7 @@ public class VehicleDaoImpl implements VehicleDao{
     public int updateUserVehicle(Vehicle vehicle, int userId){
         String sql = """
                 UPDATE vehicle 
-                SET type = ?, mpg = ?,
+                SET type = ?, mpg = ?
                 WHERE userId = ? AND id = ?
                 """;
         return jdbcTemplate.update(sql, vehicle.getType(), vehicle.getMpg(), userId, vehicle.getId());
@@ -42,7 +42,7 @@ public class VehicleDaoImpl implements VehicleDao{
     @Override
     public List<Vehicle> findVehicleByUserId(int id){
         String sql = """
-                SELECT id, make, model, vehicleYear, userId
+                SELECT *
                 FROM vehicle
                 WHERE userId = ?
                 """;

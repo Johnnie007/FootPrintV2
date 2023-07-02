@@ -2,6 +2,7 @@ package com.carbonTracker.footprint.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class User {
 
@@ -24,7 +25,7 @@ public class User {
     @JsonProperty("lifestyle")
     private String lifeStyle;
 
-    @NotBlank
+    @NotNull
     @JsonProperty("footPrint")
     private int footPrint;
     //TODO add Password variable;

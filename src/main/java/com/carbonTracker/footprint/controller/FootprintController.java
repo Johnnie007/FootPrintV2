@@ -21,6 +21,7 @@ public class FootprintController {
     private final VehicleDao vehicleDao;
     private final HomeDao homeDao;
 
+    //User Endpoints
     @Autowired
     public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao){
         this.userDao = userDao;
@@ -46,6 +47,11 @@ public class FootprintController {
     @PutMapping("/update/{id}")
     public int updateUser(@Valid @RequestBody User user,@PathVariable("id") int id){
         return userDao.updateUser(id,user);
+    }
+
+    @GetMapping("/footprint/{id}")
+    public List<User> getUserFootPrint(@PathVariable("id") int id){
+        return userDao.getUserFootPrint(id);
     }
 
     @PostMapping("{id}/add/vehicle")

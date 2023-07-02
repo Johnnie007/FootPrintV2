@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface RecommendationListDao {
 
-    List<RecommendationList> getRecommendation(int userId);
+    List<RecommendationList> getRecommendation();
 }

@@ -12,13 +12,13 @@ public class Vehicle {
     String type;
     @NotBlank
     @JsonProperty("mpg")
-    double mpg;
+    String mpg;
 
 
     @JsonProperty("userId")
     int userId;
 
-    public Vehicle(int id, String type, double mpg, int userId){
+    public Vehicle(int id, String type, String mpg, int userId){
         this.id = id;
         this.type= type;
         this.mpg = mpg;
@@ -41,7 +41,7 @@ public class Vehicle {
         this.type = type;
     }
 
-    public double getMpg() {
+    public String getMpg() {
         return mpg;
     }
 

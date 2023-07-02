@@ -13,7 +13,7 @@ public class VehicleRowMapper implements RowMapper <Vehicle> {
         return new Vehicle(
                 rs.getInt("id"),
                 rs.getString("type"),
-                rs.getDouble("mpg"),
+                rs.getString("mpg"),
                 rs.getInt("userId")
         );
     }
