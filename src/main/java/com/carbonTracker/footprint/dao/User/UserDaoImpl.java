@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDao {
         String sql = """
                 SELECT * 
                 FROM user u
-                INNER JOIN vehicles v
+                INNER JOIN vehicle v
                    ON u.id = v.userId
                 INNER JOIN home h
                     on u.id = h.userId

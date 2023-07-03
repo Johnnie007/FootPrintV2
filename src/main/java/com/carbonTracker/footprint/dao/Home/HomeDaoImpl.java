@@ -2,6 +2,7 @@ package com.carbonTracker.footprint.dao.Home;
 
 import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.home.HomeRowMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -9,12 +10,17 @@ import java.util.List;
 @Repository
 public class HomeDaoImpl implements HomeDao{
 
-    JdbcTemplate jdbcTemplate;
+    public final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public HomeDaoImpl(JdbcTemplate jdbcTemplate){
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public List<Home> getUserHomes(int userId){
         String sql = """
-                SELECT id, type, homeSize
+                SELECT *
                 FROM home
                 WHERE userId = ?
                 """;
@@ -22,16 +28,16 @@ public class HomeDaoImpl implements HomeDao{
     }
 
     @Override
-    public int addHome(Home home){
+    public int addHome(Home home, int userId){
         String sql = """
-                INSERT homeType, homeSize, userId
-                VALUES(?,?,?,?)
+                INSERT into home(homeType, homeSize, userId)
+                VALUES(?,?,?)
                 """;
-        return jdbcTemplate.update(sql, home.getHomeType(), home.getHomeSize(), home.getUserId());
+        return jdbcTemplate.update(sql, home.getHomeType(), home.getHomeSize(), userId);
     }
 
     @Override
-    public int deleteHome(Home home){
+    public int deleteHome(Home home, int userId){
         String sql = """
                 DELETE FROM home
                 WHERE userId = ? and id = ?

@@ -7,7 +7,7 @@ import java.util.List;
 public interface HomeDao {
 
     List<Home> getUserHomes(int userId);
-    int addHome(Home home);
-    int deleteHome(Home home);
+    int addHome(Home home, int userId);
+    int deleteHome(Home home, int userId);
 
 }

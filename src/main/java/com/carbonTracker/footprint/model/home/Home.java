@@ -2,10 +2,10 @@ package com.carbonTracker.footprint.model.home;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class Home {
 
-    @NotBlank
     @JsonProperty("id")
     private int id;
 
@@ -13,11 +13,11 @@ public class Home {
     @JsonProperty("homeType")
     private String homeType;
 
-    @NotBlank
+    @NotNull
     @JsonProperty("homeSize")
     private int homeSize;
 
-    @NotBlank
+    @NotNull
     @JsonProperty("userId")
     private int userId;
 

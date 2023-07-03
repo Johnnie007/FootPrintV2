@@ -2,6 +2,7 @@ package com.carbonTracker.footprint.controller;
 import com.carbonTracker.footprint.dao.Home.HomeDao;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDao;
+import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import jakarta.validation.Valid;
@@ -54,6 +55,7 @@ public class FootprintController {
         return userDao.getUserFootPrint(id);
     }
 
+    //Vehicle Endpoints
     @PostMapping("{id}/add/vehicle")
     public void addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id){
         vehicleDao.addUserVehicle(vehicle, id);
@@ -73,5 +75,23 @@ public class FootprintController {
     public int deleteVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id){
         return vehicleDao.deleteVehicle(id, vehicle);
     }
+
+    //Home Endpoints
+    @GetMapping("{id}/home")
+    public List<Home> getUserHomes(@PathVariable("id") int userId){
+        return homeDao.getUserHomes(userId);
+    }
+
+    @PostMapping("{id}/home")
+    public int addHome(@PathVariable("id") int userId, @Valid @RequestBody Home home ){
+        return homeDao.addHome(home, userId);
+    }
+
+    @DeleteMapping("{id}/delete/home")
+    public int deleteHome(@Valid @RequestBody Home home, @PathVariable("id") int userId){
+        return homeDao.deleteHome(home, userId);
+    }
+
+
 
 }
