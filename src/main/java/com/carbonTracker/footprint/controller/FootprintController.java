@@ -50,12 +50,10 @@ public class FootprintController {
         return userDao.updateUser(id,user);
     }
 
-    @GetMapping("/footprint/{id}")
-    public List<User> getUserFootPrint(@PathVariable("id") int id){
-        return userDao.getUserFootPrint(id);
-    }
-
-    //Vehicle Endpoints
+//    @GetMapping("/footprint/{id}")
+//    public List<User> getUserFootPrint(@PathVariable("id") int id){
+//        return userDao.getUserFootPrint(id);
+//    }
     @PostMapping("{id}/add/vehicle")
     public void addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id){
         vehicleDao.addUserVehicle(vehicle, id);

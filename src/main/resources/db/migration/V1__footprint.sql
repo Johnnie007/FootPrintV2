@@ -2,7 +2,7 @@ CREATE table user(
     id int auto_increment,
     first_name varChar(30),
     last_name varChar(30),
-    email varChar(20),
+    email varChar(20) UNIQUE,
     footprint int(30),
     lifeStyle varChar(40),
     primary key(id)

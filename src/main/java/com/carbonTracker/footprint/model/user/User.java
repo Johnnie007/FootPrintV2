@@ -1,8 +1,12 @@
 package com.carbonTracker.footprint.model.user;
 
+import com.carbonTracker.footprint.model.home.Home;
+import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.sql.Array;
 
 public class User {
 
@@ -30,6 +34,8 @@ public class User {
     private int footPrint;
     //TODO add Password variable;
 
+
+
     public User(int id, String firstName, String lastName, String email, String lifeStyle, int footPrint){
         this.id = id;
         this.firstName = firstName;
@@ -38,6 +44,7 @@ public class User {
         this.lifeStyle = lifeStyle;
         this.footPrint = footPrint;
     }
+
     public int getId(){
         return id;
     }
@@ -85,6 +92,8 @@ public class User {
     public void setLifeStyle(String lifeStyle) {
         this.lifeStyle = lifeStyle;
     }
+
+
 
     @Override
     public String toString(){

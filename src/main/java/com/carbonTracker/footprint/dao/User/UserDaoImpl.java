@@ -3,6 +3,7 @@ package com.carbonTracker.footprint.dao.User;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.user.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.stereotype.Repository;
@@ -71,17 +72,16 @@ public class UserDaoImpl implements UserDao {
         return jdbcTemplate.update(sql, id);
     }
 
-    @Override
-    public List <User> getUserFootPrint(int id){
-        String sql = """
-                SELECT * 
-                FROM user u
-                INNER JOIN vehicle v
-                   ON u.id = v.userId
-                INNER JOIN home h
-                    on u.id = h.userId
-                WHERE id = ?
-                """;
-        return jdbcTemplate.query(sql, new UserRowMapper(), id );
-    }
+//    @Override
+//    public List <User> getUserFootPrint(int id){
+//        String sql = """
+//                 SElECT * FROM user u
+//                    INNER JOIN vehicle v
+//                    ON u.id = v.userId
+//                    INNER JOIN home h
+//                    ON h.userID = u.id
+//                    WHERE u.id = ?;
+//                """;
+//        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<User>(User.class), id );
+//    }
 }

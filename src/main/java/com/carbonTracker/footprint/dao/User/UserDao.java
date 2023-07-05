@@ -12,5 +12,4 @@ public interface UserDao {
     int deleteUser(int id);
     int updateUser(int id, User user);
 
-    List <User> getUserFootPrint(int id);
 }
