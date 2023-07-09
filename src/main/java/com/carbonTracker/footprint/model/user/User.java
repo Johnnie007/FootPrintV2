@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.sql.Array;
+import java.util.List;
 
 public class User {
 
@@ -33,6 +33,7 @@ public class User {
     @JsonProperty("footPrint")
     private int footPrint;
     //TODO add Password variable;
+
 
 
 
@@ -73,15 +74,15 @@ public class User {
         return email;
     }
 
-    public void setEmail(){
-        this.email= email;
+    public void setEmail(String email){
+        this.email= this.email;
     }
 
     public int  getFootPrint() {
         return footPrint;
     }
 
-    public void setFootPrint(String diet) {
+    public void setFootPrint(int footPrint) {
         this.footPrint = footPrint;
     }
 

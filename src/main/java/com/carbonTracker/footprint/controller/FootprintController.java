@@ -1,7 +1,9 @@
 package com.carbonTracker.footprint.controller;
+import com.carbonTracker.footprint.dao.Footprint.FootprintDao;
 import com.carbonTracker.footprint.dao.Home.HomeDao;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDao;
+import com.carbonTracker.footprint.model.footprint.Footprint;
 import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
@@ -9,10 +11,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/footprint")
@@ -21,13 +22,15 @@ public class FootprintController {
     private final UserDao userDao;
     private final VehicleDao vehicleDao;
     private final HomeDao homeDao;
+    private final FootprintDao footprintDao;
 
     //User Endpoints
     @Autowired
-    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao){
+    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao){
         this.userDao = userDao;
         this.vehicleDao = vehicleDao;
         this.homeDao = homeDao;
+        this.footprintDao = footprintDao;
     }
 
     @PostMapping("/add")
@@ -50,10 +53,10 @@ public class FootprintController {
         return userDao.updateUser(id,user);
     }
 
-//    @GetMapping("/footprint/{id}")
-//    public List<User> getUserFootPrint(@PathVariable("id") int id){
-//        return userDao.getUserFootPrint(id);
-//    }
+    @GetMapping("/footprint/{id}")
+    public List<Footprint> getUserFootPrint(@PathVariable("id") int id){
+        return footprintDao.getUserFootprint(id);
+    }
     @PostMapping("{id}/add/vehicle")
     public void addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id){
         vehicleDao.addUserVehicle(vehicle, id);
