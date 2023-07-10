@@ -54,8 +54,8 @@ public class FootprintController {
     }
 
     @GetMapping("/footprint/{id}")
-    public List<Footprint> getUserFootPrint(@PathVariable("id") int id){
-        return footprintDao.getUserFootprint(id);
+    public Optional<Footprint> getUserFootPrint(@PathVariable("id") int id){
+        return footprintDao.getUserFootprint(id).stream().findFirst();
     }
     @PostMapping("{id}/add/vehicle")
     public void addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id){
