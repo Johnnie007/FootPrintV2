@@ -8,31 +8,22 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FootprintMapper implements ResultSetExtractor {
 
     public Object extractData(ResultSet rs) throws SQLException, DataAccessException{
+
         Map<Integer, Footprint> map = new HashMap<Integer, Footprint>();
 
-       // User user = null;
-       // Vehicle vehicle = null;
-       // Home home = null;
-      //  List homeList = null;
-      //  List vehicleList = null;
-
-
-
+        Footprint footprint;
 
         while(rs.next()){
 
             int id = rs.getInt("id");
-            //System.out.println(rs.getInt("h.id"));
 
-            Footprint footprint = map.get(id);
+            footprint = map.get(id);
+
             if(footprint == null){
                 footprint = new Footprint();
 
@@ -47,8 +38,8 @@ public class FootprintMapper implements ResultSetExtractor {
                 footprint.setUser(user);
                 map.put(id, footprint);
 
-               List vehicleList = footprint.getVehicles();
-                if(vehicleList == null){
+                List vehicleList = footprint.getVehicles();
+                if(vehicleList == null ){
 
                     vehicleList = new ArrayList<Vehicle>();
 
@@ -58,11 +49,8 @@ public class FootprintMapper implements ResultSetExtractor {
                             rs.getInt("v.userId"));
 
                     vehicleList.add(vehicle);
-
-                    footprint.setVehicles(vehicleList);
+                   footprint.setVehicles(vehicleList);
                 }
-
-
 
                List homeList = footprint.getHomes();
                 if(homeList == null){
@@ -73,16 +61,58 @@ public class FootprintMapper implements ResultSetExtractor {
                             rs.getInt("h.homeSize"),
                             rs.getInt("h.userId"));
 
-                    System.out.println(home);
-
                     homeList.add(home);
 
                     footprint.setHomes(homeList);
                 }
             }
 
+            if(footprint.getVehicles() != null){
+                List<Vehicle> vehicles = footprint.getVehicles();
+                boolean isVehiclePartOf = false;
+
+                Vehicle vehicle = new Vehicle(rs.getInt("v.id"),
+                        rs.getString("v.type"),
+                        rs.getString("v.mpg"),
+                        rs.getInt("v.userId"));
+
+                for(int i = 0; i < vehicles.size(); i++){
+                   Vehicle v =  vehicles.get(i);
+                   if(vehicle.getId() == v.getId()){
+                       isVehiclePartOf = true;
+                   }
+                   if(i == vehicles.size() - 1 && !isVehiclePartOf){
+                       vehicles.add(vehicle);
+                       footprint.setVehicles(vehicles);
+                   }
+                }
+
+            }
+
+            if(footprint.getHomes() != null){
+                List<Home> homes = footprint.getHomes();
+                boolean isHomePartOf = false;
+
+                Home home = new Home(rs.getInt("h.id"),
+                        rs.getNString("h.homeType"),
+                        rs.getInt("h.homeSize"),
+                        rs.getInt("h.userId"));
+
+                for(int i = 0; i < homes.size(); i++){
+                    Home h =  homes.get(i);
+                    if(home.getId() == h.getId()){
+                        isHomePartOf = true;
+                    }
+                    if(i == homes.size() - 1 && !isHomePartOf){
+                        homes.add(home);
+                        footprint.setHomes(homes);
+                    }
+                }
+
+            }
         }
 
         return new ArrayList<Footprint>(map.values());
     }
 }
+

@@ -37,4 +37,8 @@ public class Footprint {
         this.homes = homes;
     }
 
+    public void addHomeToList(Home home){
+        this.homes.add(home);
+    }
+
 }
