@@ -69,50 +69,38 @@ public class FootprintMapper implements ResultSetExtractor {
 
             if(footprint.getVehicles() != null){
                 List<Vehicle> vehicles = footprint.getVehicles();
-                boolean isVehiclePartOf = false;
 
                 Vehicle vehicle = new Vehicle(rs.getInt("v.id"),
                         rs.getString("v.type"),
                         rs.getString("v.mpg"),
                         rs.getInt("v.userId"));
 
-                for(int i = 0; i < vehicles.size(); i++){
-                   Vehicle v =  vehicles.get(i);
-                   if(vehicle.getId() == v.getId()){
-                       isVehiclePartOf = true;
-                   }
-                   if(i == vehicles.size() - 1 && !isVehiclePartOf){
-                       vehicles.add(vehicle);
-                       footprint.setVehicles(vehicles);
-                   }
+                boolean checkVehicleList = vehicles.stream().anyMatch(v -> v.getId() == vehicle.getId());
+                if(!checkVehicleList) {
+                    vehicles.add(vehicle);
+                    footprint.setVehicles(vehicles);
                 }
 
             }
 
             if(footprint.getHomes() != null){
                 List<Home> homes = footprint.getHomes();
-                boolean isHomePartOf = false;
 
                 Home home = new Home(rs.getInt("h.id"),
                         rs.getNString("h.homeType"),
                         rs.getInt("h.homeSize"),
                         rs.getInt("h.userId"));
 
-                for(int i = 0; i < homes.size(); i++){
-                    Home h =  homes.get(i);
-                    if(home.getId() == h.getId()){
-                        isHomePartOf = true;
-                    }
-                    if(i == homes.size() - 1 && !isHomePartOf){
-                        homes.add(home);
-                        footprint.setHomes(homes);
-                    }
+                boolean checkHomeList = homes.stream().anyMatch(h -> h.getId() == home.getId());
+                if(!checkHomeList) {
+                    homes.add(home);
+                    footprint.setHomes(homes);
                 }
 
             }
         }
 
-        return new ArrayList<Footprint>(map.values());
+        return new ArrayList<>(map.values());
     }
 }
 
