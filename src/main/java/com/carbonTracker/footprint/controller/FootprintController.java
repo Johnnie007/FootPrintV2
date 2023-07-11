@@ -11,7 +11,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +36,14 @@ public class FootprintController {
     }
 
     @PostMapping("/add")
-    public void addUser(@Valid @RequestBody User user){
-        userDao.addUser(user);
+    public ResponseEntity<Void> addUser(@Valid @RequestBody User user, UriComponentsBuilder ucb){
+        int savedUser = userDao.addUser(user);
+        URI locationOfUser = ucb
+                .path("footprint/add")
+                .buildAndExpand(savedUser)
+                .toUri();
+        System.out.println(ResponseEntity.created(locationOfUser).build());
+        return ResponseEntity.created(locationOfUser).build();
     }
 
     @GetMapping("/all")
