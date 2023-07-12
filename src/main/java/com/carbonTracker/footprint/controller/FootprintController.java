@@ -86,22 +86,40 @@ public class FootprintController {
     }
     @PostMapping("{id}/add/vehicle")
     public ResponseEntity<Void> addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id, UriComponentsBuilder ucb){
-       int savedUserVehicle = vehicleDao.addUserVehicle(vehicle, id);
-       URI locationOfVehicle = ucb
-               .path("footprint/{id}/add/vehicle")
-               .buildAndExpand(savedUserVehicle)
-               .toUri();
-        return ResponseEntity.created(locationOfVehicle).build();
+        Optional<User> findUser = userDao.findUserById(id);
+        if(findUser.isPresent()) {
+            int savedUserVehicle = vehicleDao.addUserVehicle(vehicle, id);
+            URI locationOfVehicle = ucb
+                    .path("footprint/{id}/add/vehicle")
+                    .buildAndExpand(savedUserVehicle)
+                    .toUri();
+            return ResponseEntity.created(locationOfVehicle).build();
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("{id}/vehicle")
     public ResponseEntity<List<Vehicle>> getVehicleByUserId(@PathVariable("id") int id){
-        return ResponseEntity.ok(vehicleDao.findVehicleByUserId(id));
+        Optional<User> findUser = userDao.findUserById(id);
+        if(findUser.isPresent()){
+            return ResponseEntity.ok(vehicleDao.findVehicleByUserId(id));
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("{id}/update/vehicle")
-    public int updateUserVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id){
-        return vehicleDao.updateUserVehicle(vehicle, id);
+    public ResponseEntity<Integer> updateUserVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id){
+        Optional<User> findUser = userDao.findUserById(id);
+        if(findUser.isPresent()){
+            vehicleDao.updateUserVehicle(vehicle, id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @DeleteMapping("{id}/delete/vehicle")
@@ -111,13 +129,27 @@ public class FootprintController {
 
     //Home Endpoints
     @GetMapping("{id}/home")
-    public List<Home> getUserHomes(@PathVariable("id") int userId){
-        return homeDao.getUserHomes(userId);
+    public ResponseEntity<List<Home>> getUserHomes(@PathVariable("id") int userId){
+        Optional<User> findUser = userDao.findUserById(userId);
+        if(findUser.isPresent()){
+            return ResponseEntity.ok(homeDao.getUserHomes(userId));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("{id}/home")
-    public int addHome(@PathVariable("id") int userId, @Valid @RequestBody Home home ){
-        return homeDao.addHome(home, userId);
+    public ResponseEntity<Integer> addHome(@PathVariable("id") int userId, @Valid @RequestBody Home home, UriComponentsBuilder ucb ){
+        Optional<User> findUser = userDao.findUserById(userId);
+        if(findUser.isPresent()){
+            int savedUserHome = homeDao.addHome(home, userId);
+            URI locationOfHome = ucb
+                    .path("footprint/{id}/home")
+                    .buildAndExpand(savedUserHome)
+                    .toUri();
+            return ResponseEntity.created(locationOfHome).build();
+        } else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("{id}/delete/home")
