@@ -55,7 +55,7 @@ public class FootprintController {
     public ResponseEntity<User> findById(@PathVariable("id") int id){
         Optional<User> user = userDao.findUserById(id);
         if(user.isPresent()){
-            return ResponseEntity.ok(userDao.findUserById(id).orElseThrow(() -> new RuntimeException("user not found")));
+            return ResponseEntity.ok(user.orElseThrow(() -> new RuntimeException("user not found")));
         }else{
             return ResponseEntity.notFound().build();
         }
@@ -63,13 +63,26 @@ public class FootprintController {
     }
 
     @PutMapping("/update/{id}")
-    public int updateUser(@Valid @RequestBody User user,@PathVariable("id") int id){
-        return userDao.updateUser(id,user);
+    public ResponseEntity<Integer> updateUser(@Valid @RequestBody User user, @PathVariable("id") int id){
+        Optional<User> findUser = userDao.findUserById(id);
+        if(!findUser.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            userDao.updateUser(id, user);
+            return ResponseEntity.noContent().build();
+        }
     }
 
     @GetMapping("/footprint/{id}")
-    public Optional<Footprint> getUserFootPrint(@PathVariable("id") int id){
-        return footprintDao.getUserFootprint(id).stream().findFirst();
+    public ResponseEntity<Optional<Footprint>> getUserFootPrint(@PathVariable("id") int id){
+        Optional <Footprint> footprint = footprintDao.getUserFootprint(id).stream().findFirst();
+        if(footprint.isPresent()){
+            return ResponseEntity.ok(footprint);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+
     }
     @PostMapping("{id}/add/vehicle")
     public void addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id){
