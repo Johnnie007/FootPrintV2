@@ -63,7 +63,7 @@ public class FootprintController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Integer> updateUser(@Valid @RequestBody User user, @PathVariable("id") int id){
+    public ResponseEntity<Void> updateUser(@Valid @RequestBody User user, @PathVariable("id") int id){
         Optional<User> findUser = userDao.findUserById(id);
         if(!findUser.isPresent()){
             return ResponseEntity.notFound().build();
@@ -111,7 +111,7 @@ public class FootprintController {
     }
 
     @PutMapping("{id}/update/vehicle")
-    public ResponseEntity<Integer> updateUserVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id){
+    public ResponseEntity<Void> updateUserVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id){
         Optional<User> findUser = userDao.findUserById(id);
         if(findUser.isPresent()){
             vehicleDao.updateUserVehicle(vehicle, id);
@@ -123,8 +123,9 @@ public class FootprintController {
     }
 
     @DeleteMapping("{id}/delete/vehicle")
-    public int deleteVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id){
-        return vehicleDao.deleteVehicle(id, vehicle);
+    public ResponseEntity<Void> deleteVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id){
+        vehicleDao.deleteVehicle(id, vehicle);
+        return ResponseEntity.noContent().build();
     }
 
     //Home Endpoints
@@ -138,7 +139,7 @@ public class FootprintController {
     }
 
     @PostMapping("{id}/home")
-    public ResponseEntity<Integer> addHome(@PathVariable("id") int userId, @Valid @RequestBody Home home, UriComponentsBuilder ucb ){
+    public ResponseEntity<Void> addHome(@PathVariable("id") int userId, @Valid @RequestBody Home home, UriComponentsBuilder ucb ){
         Optional<User> findUser = userDao.findUserById(userId);
         if(findUser.isPresent()){
             int savedUserHome = homeDao.addHome(home, userId);
@@ -153,8 +154,9 @@ public class FootprintController {
     }
 
     @DeleteMapping("{id}/delete/home")
-    public int deleteHome(@Valid @RequestBody Home home, @PathVariable("id") int userId){
-        return homeDao.deleteHome(home, userId);
+    public ResponseEntity<Void> deleteHome(@Valid @RequestBody Home home, @PathVariable("id") int userId){
+        homeDao.deleteHome(home, userId);
+        return ResponseEntity.noContent().build();
     }
 
 
