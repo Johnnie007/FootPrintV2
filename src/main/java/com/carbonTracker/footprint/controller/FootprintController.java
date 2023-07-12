@@ -47,13 +47,19 @@ public class FootprintController {
     }
 
     @GetMapping("/all")
-    public List<User> findAll(){
-        return userDao.findAllUsers();
+    public ResponseEntity<List<User>> findAll(){
+        return ResponseEntity.ok(userDao.findAllUsers());
     }
 
     @GetMapping("{id}")
-    public  User findById(@PathVariable("id") int id){
-        return userDao.findUserById(id).orElseThrow(() -> new RuntimeException("user not found"));
+    public ResponseEntity<User> findById(@PathVariable("id") int id){
+        Optional<User> user = userDao.findUserById(id);
+        if(user.isPresent()){
+            return ResponseEntity.ok(userDao.findUserById(id).orElseThrow(() -> new RuntimeException("user not found")));
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @PutMapping("/update/{id}")
