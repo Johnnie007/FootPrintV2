@@ -85,8 +85,13 @@ public class FootprintController {
 
     }
     @PostMapping("{id}/add/vehicle")
-    public void addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id){
-        vehicleDao.addUserVehicle(vehicle, id);
+    public ResponseEntity<Void> addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id, UriComponentsBuilder ucb){
+       int savedUserVehicle = vehicleDao.addUserVehicle(vehicle, id);
+       URI locationOfVehicle = ucb
+               .path("footprint/{id}/add/vehicle")
+               .buildAndExpand(savedUserVehicle)
+               .toUri();
+        return ResponseEntity.created(locationOfVehicle).build();
     }
 
     @GetMapping("{id}/vehicle")
