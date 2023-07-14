@@ -1,10 +1,12 @@
 package com.carbonTracker.footprint.controller;
 import com.carbonTracker.footprint.dao.Footprint.FootprintDao;
 import com.carbonTracker.footprint.dao.Home.HomeDao;
+import com.carbonTracker.footprint.dao.RecommendationList.RecommendationListDao;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDao;
 import com.carbonTracker.footprint.model.footprint.Footprint;
 import com.carbonTracker.footprint.model.home.Home;
+import com.carbonTracker.footprint.model.recommendationList.RecommendationList;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import jakarta.validation.Valid;
@@ -26,13 +28,16 @@ public class FootprintController {
     private final HomeDao homeDao;
     private final FootprintDao footprintDao;
 
+    private final RecommendationListDao recommendationListDao;
+
     //User Endpoints
     @Autowired
-    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao){
+    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao){
         this.userDao = userDao;
         this.vehicleDao = vehicleDao;
         this.homeDao = homeDao;
         this.footprintDao = footprintDao;
+        this.recommendationListDao = recommendationListDao;
     }
 
     @PostMapping("/add")
@@ -157,6 +162,11 @@ public class FootprintController {
     public ResponseEntity<Void> deleteHome(@Valid @RequestBody Home home, @PathVariable("id") int userId){
         homeDao.deleteHome(home, userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("recommendation")
+    public ResponseEntity<List<RecommendationList>> getRecommendations(){
+        return ResponseEntity.ok(recommendationListDao.getRecommendation());
     }
 
 
