@@ -24,9 +24,9 @@ public class FootprintDaoImpl implements FootprintDao {
 
         String sql = """
                  SElECT * FROM user u
-                    INNER JOIN vehicle v
+                    LEFT JOIN vehicle v
                     ON u.id = v.userId
-                    INNER JOIN home h
+                    LEFT JOIN home h
                     ON h.userID = u.id
                     WHERE u.id = ?;
                 """;

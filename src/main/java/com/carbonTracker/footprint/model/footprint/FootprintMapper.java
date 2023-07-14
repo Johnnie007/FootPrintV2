@@ -19,7 +19,6 @@ public class FootprintMapper implements ResultSetExtractor {
         Footprint footprint;
 
         while(rs.next()){
-
             int id = rs.getInt("id");
 
             footprint = map.get(id);
@@ -27,8 +26,10 @@ public class FootprintMapper implements ResultSetExtractor {
             if(footprint == null){
                 footprint = new Footprint();
 
+                System.out.println(id);
+
               User user = new User(
-                        rs.getInt(id),
+                        rs.getInt("u.id"),
                         rs.getNString("u.first_name"),
                         rs.getNString("u.last_name"),
                         rs.getNString("u.email"),
@@ -36,17 +37,22 @@ public class FootprintMapper implements ResultSetExtractor {
                         rs.getInt("u.footPrint")
                 );
                 footprint.setUser(user);
-                map.put(id, footprint);
+                map.put(id, footprint);;
+
 
                 List vehicleList = footprint.getVehicles();
                 if(vehicleList == null ){
 
                     vehicleList = new ArrayList<Vehicle>();
 
-                 Vehicle vehicle = new Vehicle(rs.getInt("v.id"),
+
+
+                    Vehicle vehicle = new Vehicle(rs.getInt("v.id"),
                             rs.getString("v.type"),
                             rs.getString("v.mpg"),
                             rs.getInt("v.userId"));
+
+
 
                     vehicleList.add(vehicle);
                    footprint.setVehicles(vehicleList);
