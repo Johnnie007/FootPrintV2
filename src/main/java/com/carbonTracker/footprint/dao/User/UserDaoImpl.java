@@ -51,7 +51,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional <User> findUserById(int id){
         String sql = """
-                SELECT id, first_name, last_name, email, footPrint, lifeStyle
+                SELECT *
                 FROM user
                 WHERE id = ?;
                 """;
