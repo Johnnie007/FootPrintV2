@@ -14,4 +14,6 @@ public interface UserDao {
 
     Optional<User> findUserEmail(String email);
 
+    int createUser(String firstName, String lastName, String email, String password);
+
 }

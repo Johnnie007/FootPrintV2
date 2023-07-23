@@ -3,6 +3,7 @@ CREATE table user(
     first_name varChar(30),
     last_name varChar(30),
     email varChar(20) UNIQUE,
+    password varChar(255) not null,
     footprint int(30),
     lifeStyle varChar(40),
     primary key(id)
