@@ -47,7 +47,6 @@ public class FootprintController {
                 .path("footprint/add")
                 .buildAndExpand(savedUser)
                 .toUri();
-        System.out.println(ResponseEntity.created(locationOfUser).build());
         return ResponseEntity.created(locationOfUser).build();
     }
 

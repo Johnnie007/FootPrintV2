@@ -33,6 +33,7 @@ public class FootprintMapper implements ResultSetExtractor {
                         rs.getNString("u.first_name"),
                         rs.getNString("u.last_name"),
                         rs.getNString("u.email"),
+                        rs.getNString("u.password"),
                         rs.getNString("u.lifeStyle"),
                         rs.getInt("u.footPrint")
                 );

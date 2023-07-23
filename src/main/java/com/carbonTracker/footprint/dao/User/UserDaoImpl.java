@@ -3,7 +3,6 @@ package com.carbonTracker.footprint.dao.User;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.user.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.stereotype.Repository;
@@ -70,6 +69,16 @@ public class UserDaoImpl implements UserDao {
                 WHERE id = ?;
                 """;
         return jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public Optional<User> findUserEmail(String email){
+        String sql = """
+                SELECT *
+                From user
+                WHERE email = ?
+                """;
+        return jdbcTemplate.query(sql, new UserRowMapper(), email).stream().findFirst();
     }
 
 }

@@ -12,4 +12,6 @@ public interface UserDao {
     int deleteUser(int id);
     int updateUser(int id, User user);
 
+    Optional<User> findUserEmail(String email);
+
 }
