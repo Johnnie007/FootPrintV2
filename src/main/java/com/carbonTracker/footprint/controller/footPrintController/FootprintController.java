@@ -1,4 +1,4 @@
-package com.carbonTracker.footprint.controller;
+package com.carbonTracker.footprint.controller.footPrintController;
 import com.carbonTracker.footprint.dao.Footprint.FootprintDao;
 import com.carbonTracker.footprint.dao.Home.HomeDao;
 import com.carbonTracker.footprint.dao.RecommendationList.RecommendationListDao;

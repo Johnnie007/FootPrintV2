@@ -40,7 +40,7 @@ public class SecurityConfig {
                         authorize.requestMatchers(HttpMethod.GET, "api/**").permitAll()
                                 .requestMatchers("api/footprint/**").permitAll()
                                 .anyRequest().authenticated()
-                );
+                        );
         return http.build();
     }
 }

@@ -6,8 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
 import java.util.Set;
 
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     private UserDao userDao;
@@ -18,10 +21,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
 
-        User user = userDao.findUserEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email not found" + email));
+        User users = userDao.findUserEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email not found" + email));
 
-       // return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), );
-        return null;
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+                .username(users.getEmail())
+                .password(users.getPassword())
+                .roles()
+                .build();
+       return userDetails;
+        //return null;
     }
 
 
