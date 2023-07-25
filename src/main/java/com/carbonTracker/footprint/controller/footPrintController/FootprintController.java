@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,14 +57,13 @@ public class FootprintController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<User> findById(@PathVariable("id") int id){
-        System.out.println(0);
+    public ResponseEntity<User> findById(@PathVariable("id") int id, Principal principal){
+        System.out.println(principal.getName());
         Optional<User> user = userDao.findUserById(id);
-        System.out.println(1);
+        System.out.println(user.get().getEmail());
         if(user.isPresent()){
             return ResponseEntity.ok(user.orElseThrow(() -> new RuntimeException("user not found")));
         }else{
-            System.out.println(4);
             return ResponseEntity.notFound().build();
         }
 
