@@ -35,12 +35,15 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers(HttpMethod.GET, "api/**").permitAll()
-                                .requestMatchers("api/**").permitAll()
+                        authorize
+                                .requestMatchers(HttpMethod.POST, "api/signup").permitAll()
+                                .requestMatchers(HttpMethod.POST, "api/signin").permitAll()
+                                .requestMatchers("api/footprint/**").authenticated()
                                 .anyRequest().authenticated()
-                        );
+                        ).formLogin();
         return http.build();
     }
 }

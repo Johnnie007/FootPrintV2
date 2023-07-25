@@ -57,10 +57,13 @@ public class FootprintController {
 
     @GetMapping("{id}")
     public ResponseEntity<User> findById(@PathVariable("id") int id){
+        System.out.println(0);
         Optional<User> user = userDao.findUserById(id);
+        System.out.println(1);
         if(user.isPresent()){
             return ResponseEntity.ok(user.orElseThrow(() -> new RuntimeException("user not found")));
         }else{
+            System.out.println(4);
             return ResponseEntity.notFound().build();
         }
 
