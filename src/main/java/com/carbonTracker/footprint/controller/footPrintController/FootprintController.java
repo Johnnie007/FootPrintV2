@@ -11,6 +11,7 @@ import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -57,11 +58,14 @@ public class FootprintController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<User> findById(@PathVariable("id") int id, Principal principal){
-        System.out.println(principal.getName());
+    public ResponseEntity<?> findById(@PathVariable("id") int id, Principal principal){
         Optional<User> user = userDao.findUserById(id);
-        System.out.println(user.get().getEmail());
         if(user.isPresent()){
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+            if(!userEmail.equals(authEmail)){
+                return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            }
             return ResponseEntity.ok(user.orElseThrow(() -> new RuntimeException("user not found")));
         }else{
             return ResponseEntity.notFound().build();
@@ -166,7 +170,7 @@ public class FootprintController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("recommendation")
+    @GetMapping("recommendations")
     public ResponseEntity<List<RecommendationList>> getRecommendations(){
         return ResponseEntity.ok(recommendationListDao.getRecommendation());
     }

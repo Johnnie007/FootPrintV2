@@ -1,14 +1,11 @@
-package com.carbonTracker.footprint.customUserDetaislService;
+package com.carbonTracker.footprint.service;
 
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.model.user.User;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
