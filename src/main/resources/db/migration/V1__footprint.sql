@@ -34,5 +34,16 @@ CREATE TABLE recommendationList(
     type varChar(15),
     product varChar(30),
     productLocation varChar(30),
+    CCS integer,
     primary key(id)
+);
+
+CREATE TABLE carbonOffsetters(
+    id int auto_increment,
+    type varChar(15),
+    product varChar(30),
+    CCS integer,
+    primary key(id),
+    FOREIGN Key (userId)
+        REFERENCES user(id)
 );

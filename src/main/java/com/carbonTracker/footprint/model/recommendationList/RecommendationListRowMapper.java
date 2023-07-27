@@ -13,7 +13,8 @@ public class RecommendationListRowMapper implements RowMapper<RecommendationList
                 rs.getInt("id"),
                 rs.getNString("type"),
                 rs.getNString("product"),
-                rs.getNString("productLocation")
+                rs.getNString("productLocation"),
+                rs.getInt("CCS")
         );
     }
 }

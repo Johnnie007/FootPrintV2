@@ -21,11 +21,16 @@ public class RecommendationList {
     @JsonProperty("productLocation")
     private String productLocation;
 
-    public RecommendationList(int id, String type, String product, String productLocation){
+    @NotBlank
+    @JsonProperty("CCS")
+    private int CCS;
+
+    public RecommendationList(int id, String type, String product, String productLocation, int CCS){
         this.id = id;
         this.type = type;
         this.product = product;
         this.productLocation = productLocation;
+        this.CCS = CCS;
     }
 
     public int getId() {
@@ -44,6 +49,8 @@ public class RecommendationList {
         return productLocation;
     }
 
+    public int getCCS() { return CCS;}
+
     public void setId(int id) {
         this.id = id;
     }
@@ -59,4 +66,6 @@ public class RecommendationList {
     public void setProductLocation(String productLocation) {
         this.productLocation = productLocation;
     }
+
+    public void setCCS(int CCS){this.CCS = CCS;}
 }
