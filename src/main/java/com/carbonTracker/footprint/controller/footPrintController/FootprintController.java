@@ -29,7 +29,6 @@ public class FootprintController {
     private final VehicleDao vehicleDao;
     private final HomeDao homeDao;
     private final FootprintDao footprintDao;
-
     private final RecommendationListDao recommendationListDao;
 
     //User Endpoints
@@ -74,47 +73,80 @@ public class FootprintController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Void> updateUser(@Valid @RequestBody User user, @PathVariable("id") int id){
+    public ResponseEntity<String> updateUser(@Valid @RequestBody User user, @PathVariable("id") int id, Principal principal){
+
         Optional<User> findUser = userDao.findUserById(id);
+
         if(!findUser.isPresent()){
             return ResponseEntity.notFound().build();
         }
         else {
-            userDao.updateUser(id, user);
-            return ResponseEntity.noContent().build();
+            String authEmail = principal.getName();
+            String userEmail = user.getEmail();
+
+            if(!userEmail.equals(authEmail)){
+                userDao.updateUser(id, user);
+                return ResponseEntity.noContent().build();
+            }
+            else {
+                return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            }
         }
     }
 
     @GetMapping("/footprint/{id}")
-    public ResponseEntity<Optional<Footprint>> getUserFootPrint(@PathVariable("id") int id){
-        Optional <Footprint> footprint = footprintDao.getUserFootprint(id).stream().findFirst();
-        if(footprint.isPresent()){
-            return ResponseEntity.ok(footprint);
-        }else{
+    public ResponseEntity<Optional<Footprint>> getUserFootPrint(@PathVariable("id") int id, Principal principal){
+        List <Footprint> footprint = footprintDao.getUserFootprint(id);
+        if(footprint.isEmpty()){
             return ResponseEntity.notFound().build();
         }
+        else{
+            String authEmail = principal.getName();
+            String userEmail = footprint.stream().findFirst().get().getUser().getEmail();
 
+            if(authEmail.equals(userEmail)){
+                return ResponseEntity.ok(footprint.stream().findFirst());
+            }
+            else{
+               return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        }
     }
     @PostMapping("{id}/add/vehicle")
-    public ResponseEntity<Void> addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id, UriComponentsBuilder ucb){
-        Optional<User> findUser = userDao.findUserById(id);
-        if(findUser.isPresent()) {
-            int savedUserVehicle = vehicleDao.addUserVehicle(vehicle, id);
-            URI locationOfVehicle = ucb
-                    .path("footprint/{id}/add/vehicle")
-                    .buildAndExpand(savedUserVehicle)
-                    .toUri();
-            return ResponseEntity.created(locationOfVehicle).build();
+    public ResponseEntity<Void> addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id, UriComponentsBuilder ucb, Principal principal){
+        Optional<User> user = userDao.findUserById(id);
+
+        if(user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+            if(!authEmail.equals(userEmail)){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }else {
+                int savedUserVehicle = vehicleDao.addUserVehicle(vehicle, id);
+                URI locationOfVehicle = ucb
+                        .path("footprint/{id}/add/vehicle")
+                        .buildAndExpand(savedUserVehicle)
+                        .toUri();
+                return ResponseEntity.created(locationOfVehicle).build();
+            }
         }else{
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("{id}/vehicle")
-    public ResponseEntity<List<Vehicle>> getVehicleByUserId(@PathVariable("id") int id){
-        Optional<User> findUser = userDao.findUserById(id);
-        if(findUser.isPresent()){
-            return ResponseEntity.ok(vehicleDao.findVehicleByUserId(id));
+    public ResponseEntity<List<Vehicle>> getVehicleByUserId(@PathVariable("id") int id, Principal principal){
+        Optional<User> user = userDao.findUserById(id);
+
+        if(user.isPresent()){
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if(!authEmail.equals(userEmail)){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }else {
+                return ResponseEntity.ok(vehicleDao.findVehicleByUserId(id));
+            }
         }
         else{
             return ResponseEntity.notFound().build();
@@ -122,11 +154,18 @@ public class FootprintController {
     }
 
     @PutMapping("{id}/update/vehicle")
-    public ResponseEntity<Void> updateUserVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id){
-        Optional<User> findUser = userDao.findUserById(id);
-        if(findUser.isPresent()){
-            vehicleDao.updateUserVehicle(vehicle, id);
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> updateUserVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id, Principal principal){
+        Optional<User> user = userDao.findUserById(id);
+        if(user.isPresent()){
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if(!authEmail.equals(userEmail)){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                vehicleDao.updateUserVehicle(vehicle, id);
+                return ResponseEntity.noContent().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -134,47 +173,80 @@ public class FootprintController {
     }
 
     @DeleteMapping("{id}/delete/vehicle")
-    public ResponseEntity<Void> deleteVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id){
-        vehicleDao.deleteVehicle(id, vehicle);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteVehicle(@Valid @RequestBody Vehicle vehicle, @PathVariable int id, Principal principal){
+        Optional<User> user = userDao.findUserById(id);
+        if(user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+            if (!authEmail.equals(userEmail)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }else {
+                vehicleDao.deleteVehicle(id, vehicle);
+                return ResponseEntity.noContent().build();
+            }
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     //Home Endpoints
     @GetMapping("{id}/home")
-    public ResponseEntity<List<Home>> getUserHomes(@PathVariable("id") int userId){
-        Optional<User> findUser = userDao.findUserById(userId);
-        if(findUser.isPresent()){
-            return ResponseEntity.ok(homeDao.getUserHomes(userId));
+    public ResponseEntity<List<Home>> getUserHomes(@PathVariable("id") int userId, Principal principal){
+        Optional<User> user = userDao.findUserById(userId);
+        if(user.isPresent()){
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if(!authEmail.equals(userEmail)){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }else {
+                return ResponseEntity.ok(homeDao.getUserHomes(userId));
+            }
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping("{id}/home")
-    public ResponseEntity<Void> addHome(@PathVariable("id") int userId, @Valid @RequestBody Home home, UriComponentsBuilder ucb ){
-        Optional<User> findUser = userDao.findUserById(userId);
-        if(findUser.isPresent()){
-            int savedUserHome = homeDao.addHome(home, userId);
-            URI locationOfHome = ucb
-                    .path("footprint/{id}/home")
-                    .buildAndExpand(savedUserHome)
-                    .toUri();
-            return ResponseEntity.created(locationOfHome).build();
+    public ResponseEntity<Void> addHome(@PathVariable("id") int userId, @Valid @RequestBody Home home, UriComponentsBuilder ucb, Principal principal ){
+        Optional<User> user = userDao.findUserById(userId);
+        if(user.isPresent()){
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+            if(!authEmail.equals(userEmail)){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            else {
+                int savedUserHome = homeDao.addHome(home, userId);
+                URI locationOfHome = ucb
+                        .path("footprint/{id}/home")
+                        .buildAndExpand(savedUserHome)
+                        .toUri();
+                return ResponseEntity.created(locationOfHome).build();
+            }
         } else{
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("{id}/delete/home")
-    public ResponseEntity<Void> deleteHome(@Valid @RequestBody Home home, @PathVariable("id") int userId){
-        homeDao.deleteHome(home, userId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteHome(@Valid @RequestBody Home home, @PathVariable("id") int userId, Principal principal){
+        Optional<User> user = userDao.findUserById(userId);
+        if(user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+            if (!authEmail.equals(userEmail)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                homeDao.deleteHome(home, userId);
+                return ResponseEntity.noContent().build();
+            }
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("recommendations")
     public ResponseEntity<List<RecommendationList>> getRecommendations(){
         return ResponseEntity.ok(recommendationListDao.getRecommendation());
     }
-
-
-
 }
