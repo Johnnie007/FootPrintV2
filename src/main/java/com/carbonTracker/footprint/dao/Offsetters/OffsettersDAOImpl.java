@@ -13,7 +13,7 @@ public class OffsettersDAOImpl implements OffsettersDAO {
 
     JdbcTemplate jdbcTemplate;
 
-    @Autowired
+    @Override
     public List<OffSetters> getOffsetters(int id){
         String sql = """
                 SELECT *
@@ -24,7 +24,7 @@ public class OffsettersDAOImpl implements OffsettersDAO {
         return jdbcTemplate.query(sql, new OffSettersMapper(), id);
     }
 
-    @Autowired
+    @Override
     public int addOffsetter(OffSetters offsetters){
         String sql = """
                 INSERT into carbonOffsetter( type, product, CCS)

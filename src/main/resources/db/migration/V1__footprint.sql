@@ -42,7 +42,8 @@ CREATE TABLE offSetters(
     id int auto_increment,
     type varChar(15),
     product varChar(30),
-    CCS integer,
+    CCS int,
+    userId int,
     primary key(id),
     FOREIGN Key (userId)
         REFERENCES user(id)

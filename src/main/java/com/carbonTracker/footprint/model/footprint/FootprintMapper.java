@@ -45,17 +45,15 @@ public class FootprintMapper implements ResultSetExtractor {
 
                     vehicleList = new ArrayList<Vehicle>();
 
-
-
                     Vehicle vehicle = new Vehicle(rs.getInt("v.id"),
                             rs.getString("v.type"),
                             rs.getString("v.mpg"),
                             rs.getInt("v.userId"));
 
-
-
-                    vehicleList.add(vehicle);
-                   footprint.setVehicles(vehicleList);
+                    if(vehicle.getId() != 0) {
+                        vehicleList.add(vehicle);
+                        footprint.setVehicles(vehicleList);
+                    }
                 }
 
                List homeList = footprint.getHomes();
@@ -67,9 +65,10 @@ public class FootprintMapper implements ResultSetExtractor {
                             rs.getInt("h.homeSize"),
                             rs.getInt("h.userId"));
 
-                    homeList.add(home);
-
-                    footprint.setHomes(homeList);
+                    if(home.getId() != 0) {
+                        homeList.add(home);
+                        footprint.setHomes(homeList);
+                    }
                 }
 
                 List offSettersList = footprint.getOffSetters();
@@ -81,8 +80,11 @@ public class FootprintMapper implements ResultSetExtractor {
                             rs.getNString("o.product"),
                             rs.getInt("o.CCS")
                     );
+                    if(offSetters.getId() != 0) {
+                        offSettersList.add(offSetters);
+                        footprint.setOffSetters(offSettersList);
+                    }
 
-                    offSettersList.add(offSetters);
                 }
             }
 

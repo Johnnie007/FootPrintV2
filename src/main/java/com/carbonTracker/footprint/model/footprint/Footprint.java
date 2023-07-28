@@ -43,8 +43,8 @@ public class Footprint {
     public List<OffSetters> getOffSetters(){
         return offSetters;
     }
-    public void setOffSetters(List<OffSetters> offsetters){
-        this.offSetters= offsetters;
+    public void setOffSetters(List<OffSetters> offSetters){
+        this.offSetters= offSetters;
     }
 
 }
