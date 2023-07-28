@@ -78,8 +78,9 @@ public class FootprintMapper implements ResultSetExtractor {
                     OffSetters offSetters = new OffSetters(rs.getInt("o.id"),
                             rs.getNString("o.type"),
                             rs.getNString("o.product"),
-                            rs.getInt("o.CCS")
-                    );
+                            rs.getInt("o.CCS"),
+                            rs.getInt("userId")
+                           );
                     if(offSetters.getId() != 0) {
                         offSettersList.add(offSetters);
                         footprint.setOffSetters(offSettersList);
@@ -127,11 +128,12 @@ public class FootprintMapper implements ResultSetExtractor {
                         rs.getInt("o.id"),
                         rs.getNString("o.type"),
                         rs.getNString("o.product"),
-                        rs.getInt("o.CCS")
-                );
+                        rs.getInt("o.CCS"),
+                        rs.getInt("userId")
+                        );
 
-                boolean checkOffsetterList = offSetters.stream().anyMatch(o -> o.getId() == offSetter.getId());
-                if(!checkOffsetterList){
+                boolean checkOffSetterList = offSetters.stream().anyMatch(o -> o.getId() == offSetter.getId());
+                if(!checkOffSetterList){
                     offSetters.add(offSetter);
                     footprint.setOffSetters(offSetters);
                 }

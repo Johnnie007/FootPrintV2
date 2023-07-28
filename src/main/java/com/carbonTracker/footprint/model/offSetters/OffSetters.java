@@ -2,6 +2,7 @@ package com.carbonTracker.footprint.model.offSetters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class OffSetters {
 
@@ -17,15 +18,20 @@ public class OffSetters {
     private String product;
 
 
-    @NotBlank
+    @NotNull
     @JsonProperty("CCS")
     private int CCS;
 
-    public OffSetters(int id, String type, String product, int ccs){
+    @NotNull
+    @JsonProperty("userId")
+    private int userId;
+
+    public OffSetters(int id, String type, String product, int CCS, int userId){
         this.id = id;
         this.type = type;
         this.product = product;
         this.CCS = CCS;
+        this.userId = userId;
     }
 
     public int getId() { return id;}
@@ -42,6 +48,8 @@ public class OffSetters {
         return CCS;
     }
 
+    public int getUserId() { return userId; }
+
     public void setId(int id ){
         this.id = id;
     }
@@ -56,6 +64,10 @@ public class OffSetters {
 
     public void setCCS(int CCS){
         this.CCS = CCS;
+    }
+
+    public void setUserId(int userId){
+        this.userId = userId;
     }
 
 }

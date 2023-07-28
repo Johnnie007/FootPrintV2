@@ -9,27 +9,31 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class OffsettersDAOImpl implements OffsettersDAO {
+public class OffSettersDaoImpl implements OffSettersDao {
 
     JdbcTemplate jdbcTemplate;
 
+    @Autowired OffSettersDaoImpl(JdbcTemplate jdbcTemplate){
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     @Override
-    public List<OffSetters> getOffsetters(int id){
+    public List<OffSetters> getOffSetters(int id){
         String sql = """
                 SELECT *
-                FROM offsetters
-                Where userid = ?
+                FROM offSetters
+                WHERE userId = ?
                 """;
 
         return jdbcTemplate.query(sql, new OffSettersMapper(), id);
     }
 
     @Override
-    public int addOffsetter(OffSetters offsetters){
+    public int addOffSetter(OffSetters offsetters, int id){
         String sql = """
-                INSERT into carbonOffsetter( type, product, CCS)
-                VALUES (?, ?, ?)
+                INSERT into offSetters( type, product, CCS, userId)
+                VALUES (?, ?, ?, ?)
                 """;
-        return jdbcTemplate.update(sql, offsetters.getType(), offsetters.getProduct(), offsetters.getCCS());
+        return jdbcTemplate.update(sql, offsetters.getType(), offsetters.getProduct(), offsetters.getCCS(), id);
     }
 }

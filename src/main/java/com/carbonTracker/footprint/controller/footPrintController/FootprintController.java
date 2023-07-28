@@ -1,11 +1,13 @@
 package com.carbonTracker.footprint.controller.footPrintController;
 import com.carbonTracker.footprint.dao.Footprint.FootprintDao;
 import com.carbonTracker.footprint.dao.Home.HomeDao;
+import com.carbonTracker.footprint.dao.Offsetters.OffSettersDao;
 import com.carbonTracker.footprint.dao.RecommendationList.RecommendationListDao;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDao;
 import com.carbonTracker.footprint.model.footprint.Footprint;
 import com.carbonTracker.footprint.model.home.Home;
+import com.carbonTracker.footprint.model.offSetters.OffSetters;
 import com.carbonTracker.footprint.model.recommendationList.RecommendationList;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
@@ -31,14 +33,17 @@ public class FootprintController {
     private final FootprintDao footprintDao;
     private final RecommendationListDao recommendationListDao;
 
+    private final OffSettersDao offSettersDao;
+
     //User Endpoints
     @Autowired
-    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao){
+    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao){
         this.userDao = userDao;
         this.vehicleDao = vehicleDao;
         this.homeDao = homeDao;
         this.footprintDao = footprintDao;
         this.recommendationListDao = recommendationListDao;
+        this.offSettersDao = offSettersDao;
     }
 
     @PostMapping("/add")
@@ -249,4 +254,47 @@ public class FootprintController {
     public ResponseEntity<List<RecommendationList>> getRecommendations(){
         return ResponseEntity.ok(recommendationListDao.getRecommendation());
     }
+
+    @GetMapping("{id}/offsetters")
+    public ResponseEntity<List<OffSetters>> getOffSetters(@PathVariable("id") int id, Principal principal){
+        Optional<User> user = userDao.findUserById(id);
+
+        if(user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if (!authEmail.equals(userEmail)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                return ResponseEntity.ok(offSettersDao.getOffSetters(id));
+            }
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("{id}/offsetters")
+    public ResponseEntity<Void> addOffSetters(@PathVariable("id") int id,@Valid @RequestBody OffSetters offSetters, UriComponentsBuilder ucb, Principal principal){
+        Optional<User> user = userDao.findUserById(id);
+
+        if(user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if (!authEmail.equals(userEmail)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                int savedOffSetter = offSettersDao.addOffSetter(offSetters, id);
+                URI locationOfOffSetter = ucb
+                        .path("{id}/offsetter")
+                        .buildAndExpand(savedOffSetter)
+                        .toUri();
+                return ResponseEntity.created(locationOfOffSetter).build();
+
+            }
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

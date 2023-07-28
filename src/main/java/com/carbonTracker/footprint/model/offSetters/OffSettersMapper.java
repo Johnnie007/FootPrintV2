@@ -13,7 +13,8 @@ public class OffSettersMapper implements RowMapper<OffSetters> {
                 rs.getInt("id"),
                 rs.getNString("type"),
                 rs.getNString("product"),
-                rs.getInt("CCS")
+                rs.getInt("CCS"),
+                rs.getInt("userId")
                 );
     }
 }
