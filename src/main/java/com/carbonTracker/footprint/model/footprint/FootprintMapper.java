@@ -1,6 +1,7 @@
 package com.carbonTracker.footprint.model.footprint;
 
 import com.carbonTracker.footprint.model.home.Home;
+import com.carbonTracker.footprint.model.offsetters.Offsetters;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import org.springframework.dao.DataAccessException;
@@ -25,8 +26,6 @@ public class FootprintMapper implements ResultSetExtractor {
 
             if(footprint == null){
                 footprint = new Footprint();
-
-                System.out.println(id);
 
               User user = new User(
                         rs.getInt("u.id"),
@@ -72,6 +71,19 @@ public class FootprintMapper implements ResultSetExtractor {
 
                     footprint.setHomes(homeList);
                 }
+
+                List offSettersList = footprint.getOffsetters();
+                if(offSettersList == null){
+                    offSettersList = new ArrayList();
+
+                    Offsetters offsetters = new Offsetters(rs.getInt("o.id"),
+                            rs.getNString("o.type"),
+                            rs.getNString("o.product"),
+                            rs.getInt("o.CCS")
+                    );
+
+                    offSettersList.add(offsetters);
+                }
             }
 
             if(footprint.getVehicles() != null){
@@ -104,6 +116,23 @@ public class FootprintMapper implements ResultSetExtractor {
                     footprint.setHomes(homes);
                 }
 
+            }
+
+            if(footprint.getOffsetters() != null){
+                List<Offsetters> offsetters = footprint.getOffsetters();
+
+                Offsetters offsetter = new Offsetters(
+                        rs.getInt("o.id"),
+                        rs.getNString("o.type"),
+                        rs.getNString("o.product"),
+                        rs.getInt("o.CCS")
+                );
+
+                boolean checkOffsetterList = offsetters.stream().anyMatch(o -> o.getId() == offsetter.getId());
+                if(!checkOffsetterList){
+                    offsetters.add(offsetter);
+                    footprint.setOffsetters(offsetters);
+                }
             }
         }
 

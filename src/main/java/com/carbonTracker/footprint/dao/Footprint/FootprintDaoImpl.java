@@ -28,7 +28,8 @@ public class FootprintDaoImpl implements FootprintDao {
                     ON u.id = v.userId
                     LEFT JOIN home h
                     ON h.userID = u.id
-                    WHERE u.id = ?;
+                    LEFT JOIN offsetters o
+                    WHERE o.id = u.id;
                 """;
         return (List<Footprint>) jdbcTemplate.query(sql, new FootprintMapper(), id );
     }
