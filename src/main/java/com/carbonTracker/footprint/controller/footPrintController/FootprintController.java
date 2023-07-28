@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/footprint")
+@RequestMapping("api/")
 public class FootprintController {
 
     private final UserDao userDao;
