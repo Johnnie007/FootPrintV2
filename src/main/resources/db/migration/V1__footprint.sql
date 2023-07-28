@@ -38,7 +38,7 @@ CREATE TABLE recommendationList(
     primary key(id)
 );
 
-CREATE TABLE offsetters(
+CREATE TABLE offSetters(
     id int auto_increment,
     type varChar(15),
     product varChar(30),

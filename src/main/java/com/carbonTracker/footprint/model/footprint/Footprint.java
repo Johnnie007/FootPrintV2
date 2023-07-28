@@ -1,7 +1,7 @@
 package com.carbonTracker.footprint.model.footprint;
 
 import com.carbonTracker.footprint.model.home.Home;
-import com.carbonTracker.footprint.model.offsetters.Offsetters;
+import com.carbonTracker.footprint.model.offSetters.OffSetters;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
 
@@ -12,7 +12,7 @@ public class Footprint {
     List <Vehicle> vehicles;
     List <Home> homes;
 
-    List <Offsetters> offsetters;
+    List <OffSetters> offSetters;
 
 
 
@@ -40,11 +40,11 @@ public class Footprint {
         this.homes = homes;
     }
 
-    public List<Offsetters> getOffsetters(){
-        return offsetters;
+    public List<OffSetters> getOffSetters(){
+        return offSetters;
     }
-    public void setOffsetters(List<Offsetters> offsetters){
-        this.offsetters= offsetters;
+    public void setOffSetters(List<OffSetters> offsetters){
+        this.offSetters= offsetters;
     }
 
 }

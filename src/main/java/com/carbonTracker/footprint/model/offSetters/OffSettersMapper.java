@@ -1,15 +1,15 @@
-package com.carbonTracker.footprint.model.offsetters;
+package com.carbonTracker.footprint.model.offSetters;
 
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class OffsettersMapper implements RowMapper<Offsetters> {
+public class OffSettersMapper implements RowMapper<OffSetters> {
 
     @Override
-    public Offsetters mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Offsetters(
+    public OffSetters mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return new OffSetters(
                 rs.getInt("id"),
                 rs.getNString("type"),
                 rs.getNString("product"),

@@ -1,7 +1,7 @@
 package com.carbonTracker.footprint.dao.Offsetters;
 
-import com.carbonTracker.footprint.model.offsetters.Offsetters;
-import com.carbonTracker.footprint.model.offsetters.OffsettersMapper;
+import com.carbonTracker.footprint.model.offSetters.OffSetters;
+import com.carbonTracker.footprint.model.offSetters.OffSettersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,18 +14,18 @@ public class OffsettersDAOImpl implements OffsettersDAO {
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public List<Offsetters> getOffsetters(int id){
+    public List<OffSetters> getOffsetters(int id){
         String sql = """
                 SELECT *
                 FROM offsetters
                 Where userid = ?
                 """;
 
-        return jdbcTemplate.query(sql, new OffsettersMapper(), id);
+        return jdbcTemplate.query(sql, new OffSettersMapper(), id);
     }
 
     @Autowired
-    public int addOffsetter(Offsetters offsetters){
+    public int addOffsetter(OffSetters offsetters){
         String sql = """
                 INSERT into carbonOffsetter( type, product, CCS)
                 VALUES (?, ?, ?)

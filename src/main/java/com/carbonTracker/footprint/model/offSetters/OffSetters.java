@@ -1,9 +1,9 @@
-package com.carbonTracker.footprint.model.offsetters;
+package com.carbonTracker.footprint.model.offSetters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
-public class Offsetters {
+public class OffSetters {
 
     @JsonProperty("id")
     private int id;
@@ -21,7 +21,7 @@ public class Offsetters {
     @JsonProperty("CCS")
     private int CCS;
 
-    public Offsetters(int id, String type, String product, int ccs){
+    public OffSetters(int id, String type, String product, int ccs){
         this.id = id;
         this.type = type;
         this.product = product;
