@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -106,12 +107,22 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findUserEmail(String email){
         String sql = """
-                SELECT *
+                SELECT email, password
                 From user
                 WHERE email = ?
                 """;
        // System.out.println(jdbcTemplate.query(sql, new UserRowMapper(), email));
-        return jdbcTemplate.query(sql, new UserRowMapper(), email).stream().findFirst();
+        List<Map<String, Object>> test = jdbcTemplate.queryForList(sql, new Object[] {email});
+
+        List<User> user = test.stream().map(u ->{
+            User userAuth = new User();
+            userAuth.setEmail(String.valueOf(u.get("email")));
+            userAuth.setPassword(String.valueOf(u.get("password")));
+            return userAuth;
+        }).collect(Collectors.toList());
+
+        return Optional.of(user.stream().findFirst().get());
+        //return jdbcTemplate.query(sql, new UserRowMapper(), email).stream().findFirst();
     }
 
 }
