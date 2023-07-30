@@ -58,7 +58,7 @@ public class FootprintController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<User>> findAll(){
+    public ResponseEntity<List<Map<String, Object>> > findAll(){
         return ResponseEntity.ok(userDao.findAllUsers());
     }
 
@@ -69,10 +69,7 @@ public class FootprintController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") int id, Principal principal){
-        System.out.println(principal);
         Optional<User> user = userDao.findUserById(id);
-        System.out.println(user);
-        System.out.println(principal);
         if(user.isPresent()){
             String authEmail = principal.getName();
             String userEmail = user.get().getEmail();

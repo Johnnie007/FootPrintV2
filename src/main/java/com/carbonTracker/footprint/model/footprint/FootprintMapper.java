@@ -27,15 +27,6 @@ public class FootprintMapper implements ResultSetExtractor {
             if(footprint == null){
                 footprint = new Footprint();
 
-//              User user = new User(
-//                rs.getInt("id"),
-//                rs.getNString("first_name"),
-//                rs.getNString("last_name"),
-//                rs.getNString("email"),
-//                rs.getNString("password"),
-//                rs.getNString("lifeStyle"),
-//                rs.getInt("footPrint"));
-
                 User user =  new User();
                 user.setId(rs.getInt("id"));
                 user.setFirstName(rs.getNString("first_name"));

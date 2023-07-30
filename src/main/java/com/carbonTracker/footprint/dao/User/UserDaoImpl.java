@@ -42,15 +42,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> findAllUsers() {
+    public List<Map<String, Object>> findAllUsers() {
         String sql = """
                 SELECT first_name, last_name, footprint, lifeStyle
                 FROM user
                 LIMIT 100;
                 """;
-        //List<Map<String, Object>> listOfUser = jdbcTemplate.queryForList(sql, new Object[] {});
-        return jdbcTemplate.query(sql, new UserRowMapper());
-        //return listOfUser;
+        List<Map<String, Object>> listOfUser = jdbcTemplate.queryForList(sql, new Object[] {});
+        return listOfUser;
     }
 
     @Override
@@ -68,20 +67,13 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<Map<String, Object>> getEmail(String email){
         String sql = """
-                SELECT first_name, last_name, email
-                FROM user""";
-
-
-        String sql2 = """
                 SELECT email, password
                 FROM user
                 WHERE email = ?
                 """;
-         List<Map<String, Object>> test = jdbcTemplate.queryForList(sql2, new Object[] {email});
-        //List<Map<String, Object>> userEmail = jdbcTemplate.queryForList(sql);
+         List<Map<String, Object>> test = jdbcTemplate.queryForList(sql, new Object[] {email});
 
         return test.stream().findFirst();
-        //return jdbcTemplate.query(sql2, new UserAuthMapper(), email);
     }
 
     @Override
@@ -111,7 +103,6 @@ public class UserDaoImpl implements UserDao {
                 From user
                 WHERE email = ?
                 """;
-       // System.out.println(jdbcTemplate.query(sql, new UserRowMapper(), email));
         List<Map<String, Object>> test = jdbcTemplate.queryForList(sql, new Object[] {email});
 
         List<User> user = test.stream().map(u ->{
@@ -122,7 +113,6 @@ public class UserDaoImpl implements UserDao {
         }).collect(Collectors.toList());
 
         return Optional.of(user.stream().findFirst().get());
-        //return jdbcTemplate.query(sql, new UserRowMapper(), email).stream().findFirst();
     }
 
 }
