@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -59,6 +60,11 @@ public class FootprintController {
     @GetMapping("/all")
     public ResponseEntity<List<User>> findAll(){
         return ResponseEntity.ok(userDao.findAllUsers());
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<List<Map<String, Object>>> findEmail(){
+        return ResponseEntity.ok(userDao.getEmail());
     }
 
     @GetMapping("{id}")

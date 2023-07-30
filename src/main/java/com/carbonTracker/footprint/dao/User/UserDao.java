@@ -3,6 +3,7 @@ package com.carbonTracker.footprint.dao.User;
 import com.carbonTracker.footprint.model.user.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 public interface UserDao {
 
@@ -15,5 +16,8 @@ public interface UserDao {
     Optional<User> findUserEmail(String email);
 
     int createUser(String firstName, String lastName, String email, String password);
+
+    List<Map<String, Object>> getEmail();
+
 
 }

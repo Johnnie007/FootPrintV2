@@ -36,10 +36,6 @@ public class User {
 
     @JsonProperty("footPrint")
     private int footPrint;
-    //TODO add Password variable;
-
-
-
 
     public User(int id, String firstName, String lastName, String email,String password, String lifeStyle, int footPrint){
         this.id = id;

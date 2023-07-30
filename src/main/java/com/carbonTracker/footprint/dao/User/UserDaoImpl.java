@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -58,6 +59,15 @@ public class UserDaoImpl implements UserDao {
         return jdbcTemplate.query(sql, new UserRowMapper(), id)
                 .stream()
                 .findFirst();
+    }
+
+    @Override
+    public List<Map<String, Object>> getEmail(){
+        String sql = """
+                SELECT first_name, last_name, email
+                FROM user""";
+        List<Map<String, Object>> userEmail = jdbcTemplate.queryForList(sql);
+        return userEmail;
     }
 
     @Override
