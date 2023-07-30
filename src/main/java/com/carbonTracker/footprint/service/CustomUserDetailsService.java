@@ -7,6 +7,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -20,12 +24,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         User users = userDao.findUserEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email not found" + email));
 
+//        System.out.println(users);
+//        System.out.println(email);
+
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
                 .username(users.getEmail())
                 .password(users.getPassword())
                 .roles()
                 .build();
-       return userDetails;
+
+
+        return userDetails;
     }
 
 

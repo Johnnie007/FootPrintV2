@@ -63,8 +63,8 @@ public class FootprintController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<List<Map<String, Object>>> findEmail(){
-        return ResponseEntity.ok(userDao.getEmail());
+    public ResponseEntity<Optional<Map<String, Object>>> findEmail(@RequestBody User user){
+        return ResponseEntity.ok(userDao.getEmail(user.getEmail()));
     }
 
     @GetMapping("{id}")

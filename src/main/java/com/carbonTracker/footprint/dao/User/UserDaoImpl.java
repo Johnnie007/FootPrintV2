@@ -1,6 +1,7 @@
 package com.carbonTracker.footprint.dao.User;
 
 import com.carbonTracker.footprint.model.user.User;
+
 import com.carbonTracker.footprint.model.user.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -42,11 +43,13 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAllUsers() {
         String sql = """
-                SELECT *
+                SELECT first_name, last_name, footprint, lifeStyle
                 FROM user
                 LIMIT 100;
                 """;
+        //List<Map<String, Object>> listOfUser = jdbcTemplate.queryForList(sql, new Object[] {});
         return jdbcTemplate.query(sql, new UserRowMapper());
+        //return listOfUser;
     }
 
     @Override
@@ -62,12 +65,22 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<Map<String, Object>> getEmail(){
+    public Optional<Map<String, Object>> getEmail(String email){
         String sql = """
                 SELECT first_name, last_name, email
                 FROM user""";
-        List<Map<String, Object>> userEmail = jdbcTemplate.queryForList(sql);
-        return userEmail;
+
+
+        String sql2 = """
+                SELECT email, password
+                FROM user
+                WHERE email = ?
+                """;
+         List<Map<String, Object>> test = jdbcTemplate.queryForList(sql2, new Object[] {email});
+        //List<Map<String, Object>> userEmail = jdbcTemplate.queryForList(sql);
+
+        return test.stream().findFirst();
+        //return jdbcTemplate.query(sql2, new UserAuthMapper(), email);
     }
 
     @Override
@@ -97,6 +110,7 @@ public class UserDaoImpl implements UserDao {
                 From user
                 WHERE email = ?
                 """;
+       // System.out.println(jdbcTemplate.query(sql, new UserRowMapper(), email));
         return jdbcTemplate.query(sql, new UserRowMapper(), email).stream().findFirst();
     }
 

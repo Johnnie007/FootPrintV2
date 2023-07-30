@@ -17,7 +17,7 @@ public interface UserDao {
 
     int createUser(String firstName, String lastName, String email, String password);
 
-    List<Map<String, Object>> getEmail();
+    Optional<Map<String, Object>> getEmail(String email);
 
 
 }
