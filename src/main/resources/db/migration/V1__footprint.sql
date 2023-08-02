@@ -48,3 +48,15 @@ CREATE TABLE offSetters(
     FOREIGN Key (userId)
         REFERENCES user(id)
 );
+
+CREATE TABLE profileImage(
+    id int auto_increment,
+    type varChar(15),
+    imageName varChar(30),
+    imageData MEDIUMBLOB,
+    userId int,
+    primary key(id),
+    FOREIGN Key (userId)
+        REFERENCES user(id)
+);
+
