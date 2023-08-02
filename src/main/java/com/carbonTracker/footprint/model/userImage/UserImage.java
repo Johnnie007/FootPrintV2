@@ -10,20 +10,25 @@ public class UserImage {
     private int id;
 
     @NotBlank
-    @JsonProperty("homeType")
+    @JsonProperty("type")
     private String type;
 
+    @NotBlank()
+    @JsonProperty("imageName")
+    private String imageName;
+
     @NotNull
-    @JsonProperty("homeSize")
+    @JsonProperty("imageData")
     private byte[] imageData;
 
     @NotNull
     @JsonProperty("userId")
     private int userId;
 
-    public UserImage(int id, String type, @NotNull byte[] imageData, int userId) {
+    public UserImage(int id, String type, String imageName, @NotNull byte[] imageData, int userId) {
         this.id = id;
         this.type = type;
+        this.imageName = imageName;
         this.imageData = imageData;
         this.userId = userId;
     }
@@ -58,5 +63,13 @@ public class UserImage {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }
