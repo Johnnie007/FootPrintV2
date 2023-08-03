@@ -43,9 +43,10 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "api/signup").permitAll()
                                 .requestMatchers(HttpMethod.POST, "api/signin").permitAll()
                                 .requestMatchers("api/recommendations").permitAll()
-                                .requestMatchers("api/footprint/**").authenticated()
-                                .anyRequest().authenticated()
-                        ).httpBasic(Customizer.withDefaults());
+                                .requestMatchers("api/footprint/**").permitAll()
+                                .anyRequest().permitAll()
+                        );
+                //.httpBasic(Customizer.withDefaults());
 
         return http.build();
     }

@@ -5,6 +5,7 @@ import com.carbonTracker.footprint.dao.Offsetters.OffSettersDao;
 import com.carbonTracker.footprint.dao.RecommendationList.RecommendationListDao;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDao;
+import com.carbonTracker.footprint.dao.userImage.UserImageDao;
 import com.carbonTracker.footprint.model.footprint.Footprint;
 import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.offSetters.OffSetters;
@@ -16,8 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
@@ -33,18 +36,19 @@ public class FootprintController {
     private final HomeDao homeDao;
     private final FootprintDao footprintDao;
     private final RecommendationListDao recommendationListDao;
-
     private final OffSettersDao offSettersDao;
+    private final UserImageDao userImageDao;
 
     //User Endpoints
     @Autowired
-    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao){
+    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao, UserImageDao userImageDao){
         this.userDao = userDao;
         this.vehicleDao = vehicleDao;
         this.homeDao = homeDao;
         this.footprintDao = footprintDao;
         this.recommendationListDao = recommendationListDao;
         this.offSettersDao = offSettersDao;
+        this.userImageDao = userImageDao;
     }
 
     @PostMapping("/add")
@@ -301,6 +305,17 @@ public class FootprintController {
         }else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("{id}/upload")
+    public ResponseEntity<Void> uploadImage(@PathVariable("id") int id, MultipartFile file) throws IOException {
+
+        System.out.println(file.getName());
+        System.out.println(file.getOriginalFilename());
+        System.out.println(file.getContentType());
+        System.out.println(file.getBytes());
+        System.out.println(0);
+        return null;
     }
 
 }
