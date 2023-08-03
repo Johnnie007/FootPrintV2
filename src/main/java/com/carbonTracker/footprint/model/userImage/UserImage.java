@@ -3,7 +3,9 @@ package com.carbonTracker.footprint.model.userImage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
+@Builder
 public class UserImage {
 
     @JsonProperty("id")

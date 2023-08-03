@@ -104,15 +104,19 @@ public class UserDaoImpl implements UserDao {
                 WHERE email = ?
                 """;
         List<Map<String, Object>> test = jdbcTemplate.queryForList(sql, new Object[] {email});
-
+        System.out.println(test);
         List<User> user = test.stream().map(u ->{
             User userAuth = new User();
             userAuth.setEmail(String.valueOf(u.get("email")));
             userAuth.setPassword(String.valueOf(u.get("password")));
             return userAuth;
         }).collect(Collectors.toList());
+        if(user.isEmpty()){
+            return Optional.empty();
+        }else{
+            return Optional.of(user.stream().findFirst().get());
+        }
 
-        return Optional.of(user.stream().findFirst().get());
     }
 
 }

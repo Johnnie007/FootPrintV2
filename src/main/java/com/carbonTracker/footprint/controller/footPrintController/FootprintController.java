@@ -12,6 +12,7 @@ import com.carbonTracker.footprint.model.offSetters.OffSetters;
 import com.carbonTracker.footprint.model.recommendationList.RecommendationList;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
+import com.carbonTracker.footprint.service.UserImageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,10 +39,11 @@ public class FootprintController {
     private final RecommendationListDao recommendationListDao;
     private final OffSettersDao offSettersDao;
     private final UserImageDao userImageDao;
+    private final UserImageService userImageService;
 
     //User Endpoints
     @Autowired
-    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao, UserImageDao userImageDao){
+    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao, UserImageDao userImageDao, UserImageService userImageService){
         this.userDao = userDao;
         this.vehicleDao = vehicleDao;
         this.homeDao = homeDao;
@@ -49,6 +51,7 @@ public class FootprintController {
         this.recommendationListDao = recommendationListDao;
         this.offSettersDao = offSettersDao;
         this.userImageDao = userImageDao;
+        this.userImageService = userImageService;
     }
 
     @PostMapping("/add")
@@ -308,14 +311,16 @@ public class FootprintController {
     }
 
     @PostMapping("{id}/upload")
-    public ResponseEntity<Void> uploadImage(@PathVariable("id") int id, MultipartFile file) throws IOException {
+    public ResponseEntity<String> uploadImage(@PathVariable("id") int id, MultipartFile file) throws IOException {
 
         System.out.println(file.getName());
         System.out.println(file.getOriginalFilename());
         System.out.println(file.getContentType());
         System.out.println(file.getBytes());
         System.out.println(0);
-        return null;
+
+        String uploadImage = userImageService.uploadImage(file, id);
+        return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
     }
 
 }

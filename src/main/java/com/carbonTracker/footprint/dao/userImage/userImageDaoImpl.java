@@ -19,18 +19,18 @@ public class UserImageDaoImpl implements UserImageDao {
     }
 
     @Override
-    public int addUserImage(UserImage userImage){
+    public int addUserImage(UserImage userImage, int id){
         String sql = """
-                INSERT into user (type, imageName, imageData, userId)
-                Values (?,?,?,?,)
+                INSERT into profileImage (type, imageName, imageData, userId)
+                Values (?,?,?,?)
                 """;
-        return jdbcTemplate.update(sql, userImage.getType(), userImage.getImageName(), userImage.getImageName(), userImage.getUserId());
+        return jdbcTemplate.update(sql, userImage.getType(), userImage.getImageName(), userImage.getImageName(), id);
     }
 
     @Override
     public int updateUserImage(int id, UserImage userImage){
         String sql = """
-                Update userImage
+                Update profileImage
                 SET type = ?, imageName = ?, imageData = ?
                 WHERE userId = ?
                 """;
@@ -41,7 +41,7 @@ public class UserImageDaoImpl implements UserImageDao {
     public Optional <UserImage> findUserImage(int id){
         String sql = """
                 SELECT *
-                FROM userImage
+                FROM profileImage
                 WHERE userId =  ?
                 """;
         return jdbcTemplate.query(sql, new UserImageMapper(), id).stream().findFirst();
