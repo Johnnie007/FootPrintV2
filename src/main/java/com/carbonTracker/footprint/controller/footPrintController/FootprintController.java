@@ -313,14 +313,13 @@ public class FootprintController {
     @PostMapping("{id}/upload")
     public ResponseEntity<String> uploadImage(@PathVariable("id") int id, MultipartFile file) throws IOException {
 
-        System.out.println(file.getName());
-        System.out.println(file.getOriginalFilename());
-        System.out.println(file.getContentType());
-        System.out.println(file.getBytes());
-        System.out.println(0);
-
         String uploadImage = userImageService.uploadImage(file, id);
         return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+    }
+
+    @GetMapping("{id}/image")
+    public ResponseEntity <?> downloadImage(@PathVariable("id") int id){
+       return ResponseEntity.ok(userImageDao.findUserImage(id));
     }
 
 }
