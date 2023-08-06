@@ -324,26 +324,32 @@ public class FootprintController {
     }
 
     @PostMapping("{id}/upload")
-    public UploadFileResponse uploadImage(@PathVariable("id") int id, MultipartFile file) throws IOException {
+    public ResponseEntity<UploadFileResponse> uploadImage(@PathVariable("id") int id, MultipartFile file) throws IOException {
 
       int userImage = userImageService.storeFile(file,id);
 
+
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile")
+                .path("api/")
+                .path(Integer.toString(id))
+                .path("/image")
                 .toUriString();
 
-        return new UploadFileResponse(file.getOriginalFilename(), fileDownloadUri,
-                file.getContentType(), file.getSize());
+        return new ResponseEntity<>(new UploadFileResponse(file.getOriginalFilename(), fileDownloadUri,
+                file.getContentType(), file.getSize()), HttpStatus.OK);
 
     }
 
     @GetMapping("{id}/image")
-    public ResponseEntity <Resource> downloadImage(@PathVariable("id") int id){
-        UserImage userImage = userImageService.getImage(id);
+    public ResponseEntity <?> downloadImage(@PathVariable("id") int id){
+        Optional<UserImage> userImage = userImageService.getImage(id);
+        if(userImage.isEmpty()){
+            return  ResponseEntity.ok(userImage);
+        }
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(userImage.getType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userImage.getImageName() + "\"")
-                .body(new ByteArrayResource(userImage.getImageData()));
+                .contentType(MediaType.parseMediaType(userImage.get().getType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userImage.get().getImageName() + "\"")
+                .body(new ByteArrayResource(userImage.get().getImageData()));
     }
 
 }
