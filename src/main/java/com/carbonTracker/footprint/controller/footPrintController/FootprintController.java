@@ -5,7 +5,6 @@ import com.carbonTracker.footprint.dao.Offsetters.OffSettersDao;
 import com.carbonTracker.footprint.dao.RecommendationList.RecommendationListDao;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDao;
-import com.carbonTracker.footprint.dao.userImage.UserImageDao;
 import com.carbonTracker.footprint.model.footprint.Footprint;
 import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.offSetters.OffSetters;
@@ -15,16 +14,13 @@ import com.carbonTracker.footprint.model.userImage.UserImage;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import com.carbonTracker.footprint.responses.UploadFileResponse;
 import com.carbonTracker.footprint.service.UserImageService;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -48,8 +44,6 @@ public class FootprintController {
     private final RecommendationListDao recommendationListDao;
     private final OffSettersDao offSettersDao;
 
-    private final UserImageDao userImageDao;
-
     @Autowired
     private UserImageService userImageService;
 
@@ -57,14 +51,13 @@ public class FootprintController {
 
     //User Endpoints
     @Autowired
-    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao, UserImageDao userImageDao){
+    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao){
         this.userDao = userDao;
         this.vehicleDao = vehicleDao;
         this.homeDao = homeDao;
         this.footprintDao = footprintDao;
         this.recommendationListDao = recommendationListDao;
         this.offSettersDao = offSettersDao;
-        this.userImageDao = userImageDao;
     }
 
     @PostMapping("/add")
@@ -373,37 +366,26 @@ public class FootprintController {
         }
     }
 
-//    @PutMapping("{id}/image")
-//    public ResponseEntity <?> updateImage(@PathVariable("id") int id, @RequestBody MultipartFile file,Principal principal) {
-//        Optional<UserImage> image = userImageService.getImage(id);
-//        Optional<User> user = userDao.findUserById(id);
-//
-//        System.out.println(!image.isEmpty());
-//        System.out.println(file);
-//
-//        if(user.isPresent()) {
-//            String authEmail = principal.getName();
-//            String userEmail = user.get().getEmail();
-//
-//            if (!authEmail.equals(userEmail)) {
-//                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//            } else if (!image.isEmpty()) {
-//                int userImage = userImageService.updateImage(file, id);
-//                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//                        .path("api/")
-//                        .path(Integer.toString(id))
-//                        .path("/image")
-//                        .toUriString();
-//
-//                return new ResponseEntity<>(new UploadFileResponse(file.getOriginalFilename(), fileDownloadUri,
-//                        file.getContentType(), file.getSize()), HttpStatus.OK);
-//            }
-//            else {
-//                return new ResponseEntity<>("User does not have image stored",HttpStatus.METHOD_NOT_ALLOWED);
-//            }
-//        }else{
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    @DeleteMapping("{id}/image")
+    public ResponseEntity<?> deleteImage(@PathVariable("id") int userId, Principal principal) {
+        Optional<User> user = userDao.findUserById(userId);
+        Optional<UserImage> userImage = userImageService.getImage(userId);
+        if (user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if (!authEmail.equals(userEmail)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else if (userImage.isPresent()) {
+                userImageService.deleteImage(userId);
+                return ResponseEntity.noContent().build();
+            } else {
+                return new ResponseEntity<>("No Image was saved", HttpStatus.NOT_MODIFIED);
+            }
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

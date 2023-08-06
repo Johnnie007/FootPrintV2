@@ -27,14 +27,6 @@ public class UserImage {
     @JsonProperty("userId")
     private int userId;
 
-//    public UserImage(int id, String type, String imageName, @NotNull byte[] imageData, int userId) {
-//        this.id = id;
-//        this.type = type;
-//        this.imageName = imageName;
-//        this.imageData = imageData;
-//        this.userId = userId;
-//    }
-
     public int getId() {
         return id;
     }

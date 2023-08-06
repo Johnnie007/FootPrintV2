@@ -24,7 +24,6 @@ public class UserImageService {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         Optional<UserImage> image = getImage(id);
 
-        System.out.println(image.isEmpty());
         try{
 
             if(fileName.contains("..")){
@@ -50,6 +49,10 @@ public class UserImageService {
 
     public Optional<UserImage> getImage(int id){
         return userImageDao.findUserImage(id);
+    }
+
+    public int deleteImage(int id){
+        return userImageDao.deleteUserImage(id);
     }
 
 

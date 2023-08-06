@@ -46,4 +46,13 @@ public class UserImageDaoImpl implements UserImageDao{
                 """;
         return jdbcTemplate.query(sql, new UserImageMapper(), id).stream().findFirst();
     }
+
+    @Override
+    public int deleteUserImage(int id){
+        String sql = """
+                DELETE FROM profileImage
+                WHERE userId = ?
+                """;
+        return jdbcTemplate.update(sql, id);
+    }
 }
