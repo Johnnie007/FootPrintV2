@@ -324,32 +324,86 @@ public class FootprintController {
     }
 
     @PostMapping("{id}/upload")
-    public ResponseEntity<UploadFileResponse> uploadImage(@PathVariable("id") int id, MultipartFile file) throws IOException {
+    public ResponseEntity<?> uploadImage(@PathVariable("id") int id, MultipartFile file, Principal principal) throws IOException {
+        Optional<UserImage> image = userImageService.getImage(id);
+        Optional<User> user = userDao.findUserById(id);
 
-      int userImage = userImageService.storeFile(file,id);
+        if(user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
 
+            if (!authEmail.equals(userEmail)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                int userImage = userImageService.storeFile(file, id);
+                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("api/")
+                        .path(Integer.toString(id))
+                        .path("/image")
+                        .toUriString();
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("api/")
-                .path(Integer.toString(id))
-                .path("/image")
-                .toUriString();
-
-        return new ResponseEntity<>(new UploadFileResponse(file.getOriginalFilename(), fileDownloadUri,
-                file.getContentType(), file.getSize()), HttpStatus.OK);
-
+                return new ResponseEntity<>(new UploadFileResponse(file.getOriginalFilename(), fileDownloadUri,
+                        file.getContentType(), file.getSize()), HttpStatus.OK);
+            }
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("{id}/image")
-    public ResponseEntity <?> downloadImage(@PathVariable("id") int id){
+    public ResponseEntity <?> downloadImage(@PathVariable("id") int id, Principal principal) {
         Optional<UserImage> userImage = userImageService.getImage(id);
-        if(userImage.isEmpty()){
-            return  ResponseEntity.ok(userImage);
+        Optional<User> user = userDao.findUserById(id);
+        if (user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if (!authEmail.equals(userEmail)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else if (userImage.isEmpty()) {
+                return ResponseEntity.ok(userImage);
+            } else {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(userImage.get().getType()))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userImage.get().getImageName() + "\"")
+                        .body(new ByteArrayResource(userImage.get().getImageData()));
+            }
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(userImage.get().getType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userImage.get().getImageName() + "\"")
-                .body(new ByteArrayResource(userImage.get().getImageData()));
     }
+
+//    @PutMapping("{id}/image")
+//    public ResponseEntity <?> updateImage(@PathVariable("id") int id, @RequestBody MultipartFile file,Principal principal) {
+//        Optional<UserImage> image = userImageService.getImage(id);
+//        Optional<User> user = userDao.findUserById(id);
+//
+//        System.out.println(!image.isEmpty());
+//        System.out.println(file);
+//
+//        if(user.isPresent()) {
+//            String authEmail = principal.getName();
+//            String userEmail = user.get().getEmail();
+//
+//            if (!authEmail.equals(userEmail)) {
+//                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//            } else if (!image.isEmpty()) {
+//                int userImage = userImageService.updateImage(file, id);
+//                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                        .path("api/")
+//                        .path(Integer.toString(id))
+//                        .path("/image")
+//                        .toUriString();
+//
+//                return new ResponseEntity<>(new UploadFileResponse(file.getOriginalFilename(), fileDownloadUri,
+//                        file.getContentType(), file.getSize()), HttpStatus.OK);
+//            }
+//            else {
+//                return new ResponseEntity<>("User does not have image stored",HttpStatus.METHOD_NOT_ALLOWED);
+//            }
+//        }else{
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
 }

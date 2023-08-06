@@ -22,8 +22,11 @@ public class UserImageService {
     public int storeFile(MultipartFile file, int id){
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        Optional<UserImage> image = getImage(id);
 
+        System.out.println(image.isEmpty());
         try{
+
             if(fileName.contains("..")){
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
@@ -32,8 +35,14 @@ public class UserImageService {
             userImage.setImageName(fileName);
             userImage.setType(file.getContentType());
             userImage.setImageData(file.getBytes());
+            if(image.isEmpty()){
+                return userImageDao.addUserImage(userImage, id);
+            }
+            else{
+                return userImageDao.updateUserImage(id, userImage);
+            }
 
-            return userImageDao.addUserImage(userImage, id);
+
         } catch(IOException ex ){
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
@@ -42,5 +51,6 @@ public class UserImageService {
     public Optional<UserImage> getImage(int id){
         return userImageDao.findUserImage(id);
     }
+
 
 }

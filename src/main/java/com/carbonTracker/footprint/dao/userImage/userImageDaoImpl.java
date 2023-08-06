@@ -34,7 +34,7 @@ public class UserImageDaoImpl implements UserImageDao{
                 SET type = ?, imageName = ?, imageData = ?
                 WHERE userId = ?
                 """;
-        return jdbcTemplate.update(sql, userImage.getType(), userImage.getImageName(), userImage.getImageName(), id);
+        return jdbcTemplate.update(sql, userImage.getType(), userImage.getImageName(), userImage.getImageData(), id);
     }
 
     @Override
