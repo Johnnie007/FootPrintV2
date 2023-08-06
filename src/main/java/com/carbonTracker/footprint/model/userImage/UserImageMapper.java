@@ -9,12 +9,14 @@ public class UserImageMapper implements RowMapper<UserImage> {
 
     @Override
     public UserImage mapRow(ResultSet rs, int rowNum) throws SQLException{
-        return new UserImage(
-                rs.getInt("id"),
-                rs.getNString("type"),
-                rs.getNString("imageName"),
-                rs.getBytes("imageData"),
-                rs.getInt("userId")
-        );
+        UserImage userImage = new UserImage();
+
+                userImage.setId(rs.getInt("id"));
+                userImage.setType(rs.getNString("type"));
+                userImage.setImageName(rs.getNString("imageName"));
+                userImage.setImageData(rs.getBytes("imageData"));
+                userImage.setId(rs.getInt("userId"));
+
+                return userImage;
     }
 }

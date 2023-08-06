@@ -3,11 +3,10 @@ package com.carbonTracker.footprint.model.userImage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 
-@Builder
+
+
 public class UserImage {
-
     @JsonProperty("id")
     private int id;
 
@@ -19,6 +18,7 @@ public class UserImage {
     @JsonProperty("imageName")
     private String imageName;
 
+
     @NotNull
     @JsonProperty("imageData")
     private byte[] imageData;
@@ -27,13 +27,13 @@ public class UserImage {
     @JsonProperty("userId")
     private int userId;
 
-    public UserImage(int id, String type, String imageName, @NotNull byte[] imageData, int userId) {
-        this.id = id;
-        this.type = type;
-        this.imageName = imageName;
-        this.imageData = imageData;
-        this.userId = userId;
-    }
+//    public UserImage(int id, String type, String imageName, @NotNull byte[] imageData, int userId) {
+//        this.id = id;
+//        this.type = type;
+//        this.imageName = imageName;
+//        this.imageData = imageData;
+//        this.userId = userId;
+//    }
 
     public int getId() {
         return id;

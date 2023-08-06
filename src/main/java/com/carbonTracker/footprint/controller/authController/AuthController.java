@@ -31,7 +31,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody User user){
-        System.out.println(userDao.findUserEmail(user.getEmail()));
         if(!userDao.findUserEmail(user.getEmail()).isEmpty()){
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }
@@ -43,7 +42,6 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<String> authenicateUser(@RequestBody User user){
         Authentication authentication = authenticationManger.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
-        System.out.println(2302);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new ResponseEntity<>("User sign-in successfully", HttpStatus.OK);
     }

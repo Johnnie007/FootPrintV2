@@ -2,45 +2,75 @@ package com.carbonTracker.footprint.service;
 
 import com.carbonTracker.footprint.dao.userImage.UserImageDao;
 import com.carbonTracker.footprint.model.userImage.UserImage;
-import com.carbonTracker.footprint.utils.ImageUtils;
-import org.apache.commons.lang3.exception.ContextedRuntimeException;
+import com.carbonTracker.footprint.responses.exceptions.FileStorageException;
+import com.carbonTracker.footprint.responses.exceptions.MyFileNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.zip.DataFormatException;
 
 @Service
 public class UserImageService {
 
-    private final UserImageDao imageDao;
 
-    public UserImageService(UserImageDao imageDao) {
-        this.imageDao = imageDao;
-    }
 
-    public String uploadImage(MultipartFile file, int id) throws IOException {
-        var imageToSave = UserImage.builder()
-                .imageName(file.getName())
-                .type(file.getContentType())
-                .imageData(ImageUtils.compressImage(file.getBytes()))
-                .build();
-        imageDao.addUserImage(imageToSave, id);
-        return "File uploaded successfully : " + file.getOriginalFilename();
-    }
+    @Autowired
+    private UserImageDao userImageDao;
 
-    public byte[] downloadImage(int userId){
-        Optional<UserImage> dbImage = imageDao.findUserImage(userId);
-        return dbImage.map(image ->{
-            try{
-                return ImageUtils.decompressImage(image.getImageData());
-            } catch(DataFormatException | IOException exception){
-                throw new ContextedRuntimeException("Error downloading an image", exception)
-                        .addContextValue("Image id", userId)
-                        .addContextValue("Image name", image.getImageName());
+    public int storeFile(MultipartFile file, int id){
+
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        try{
+            if(fileName.contains("..")){
+                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
-        }).orElse(null);
+
+            UserImage userImage = new UserImage();
+            userImage.setImageName(fileName);
+            userImage.setType(file.getContentType());
+            userImage.setImageData(file.getBytes());
+
+            return userImageDao.addUserImage(userImage, id);
+        } catch(IOException ex ){
+            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+        }
     }
+
+    public UserImage getImage(int id){
+        return userImageDao.findUserImage(id).orElseThrow(() -> new MyFileNotFoundException("File not found with id " + id));
+    }
+
+//    private final Path fileStorageLocation;
+//
+//    @Autowired
+//    public UserImageService(ImageUtils imageUtils){
+//        this.fileStorageLocation = Paths.get(imageUtils.getUploadDir())
+//                .toAbsolutePath().normalize();
+//        try{
+//            Files.createDirectories(this.fileStorageLocation );
+//        }catch (Exception ex){
+//            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+//        }
+//    }
+//
+//    public String storeFile(MultipartFile file){
+//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//
+//        try{
+//            if(fileName.contains("..")){
+//                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+//            }
+//
+//            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+//
+//            Files.copy(file.getInputStream(),targetLocation, StandardCopyOption.REPLACE_EXISTING);
+//        } catch (IOException ex){
+//            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+//        }
+//    }
 
 }

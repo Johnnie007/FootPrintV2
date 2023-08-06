@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class UserImageDaoImpl implements UserImageDao {
+public class UserImageDaoImpl implements UserImageDao{
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -24,7 +24,7 @@ public class UserImageDaoImpl implements UserImageDao {
                 INSERT into profileImage (type, imageName, imageData, userId)
                 Values (?,?,?,?)
                 """;
-        return jdbcTemplate.update(sql, userImage.getType(), userImage.getImageName(), userImage.getImageName(), id);
+        return jdbcTemplate.update(sql, userImage.getType(), userImage.getImageName(), userImage.getImageData(), id);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UserImageDaoImpl implements UserImageDao {
     }
 
     @Override
-    public Optional <UserImage> findUserImage(int id){
+    public Optional<UserImage> findUserImage(int id){
         String sql = """
                 SELECT *
                 FROM profileImage

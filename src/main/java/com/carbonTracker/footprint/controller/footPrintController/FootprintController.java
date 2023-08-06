@@ -11,14 +11,23 @@ import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.offSetters.OffSetters;
 import com.carbonTracker.footprint.model.recommendationList.RecommendationList;
 import com.carbonTracker.footprint.model.user.User;
+import com.carbonTracker.footprint.model.userImage.UserImage;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
+import com.carbonTracker.footprint.responses.UploadFileResponse;
 import com.carbonTracker.footprint.service.UserImageService;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -38,12 +47,17 @@ public class FootprintController {
     private final FootprintDao footprintDao;
     private final RecommendationListDao recommendationListDao;
     private final OffSettersDao offSettersDao;
+
     private final UserImageDao userImageDao;
-    private final UserImageService userImageService;
+
+    @Autowired
+    private UserImageService userImageService;
+
+
 
     //User Endpoints
     @Autowired
-    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao, UserImageDao userImageDao, UserImageService userImageService){
+    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao, UserImageDao userImageDao){
         this.userDao = userDao;
         this.vehicleDao = vehicleDao;
         this.homeDao = homeDao;
@@ -51,7 +65,6 @@ public class FootprintController {
         this.recommendationListDao = recommendationListDao;
         this.offSettersDao = offSettersDao;
         this.userImageDao = userImageDao;
-        this.userImageService = userImageService;
     }
 
     @PostMapping("/add")
@@ -311,15 +324,26 @@ public class FootprintController {
     }
 
     @PostMapping("{id}/upload")
-    public ResponseEntity<String> uploadImage(@PathVariable("id") int id, MultipartFile file) throws IOException {
+    public UploadFileResponse uploadImage(@PathVariable("id") int id, MultipartFile file) throws IOException {
 
-        String uploadImage = userImageService.uploadImage(file, id);
-        return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+      int userImage = userImageService.storeFile(file,id);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile")
+                .toUriString();
+
+        return new UploadFileResponse(file.getOriginalFilename(), fileDownloadUri,
+                file.getContentType(), file.getSize());
+
     }
 
     @GetMapping("{id}/image")
-    public ResponseEntity <?> downloadImage(@PathVariable("id") int id){
-       return ResponseEntity.ok(userImageDao.findUserImage(id));
+    public ResponseEntity <Resource> downloadImage(@PathVariable("id") int id){
+        UserImage userImage = userImageService.getImage(id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(userImage.getType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + userImage.getImageName() + "\"")
+                .body(new ByteArrayResource(userImage.getImageData()));
     }
 
 }
