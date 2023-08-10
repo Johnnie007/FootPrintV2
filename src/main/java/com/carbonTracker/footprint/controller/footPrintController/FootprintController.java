@@ -64,7 +64,7 @@ public class FootprintController {
     public ResponseEntity<Void> addUser(@Valid @RequestBody User user, UriComponentsBuilder ucb){
         int savedUser = userDao.addUser(user);
         URI locationOfUser = ucb
-                .path("footprint/add")
+                .path("api/add")
                 .buildAndExpand(savedUser)
                 .toUri();
         return ResponseEntity.created(locationOfUser).build();
