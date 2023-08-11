@@ -11,9 +11,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,13 +55,47 @@ public class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty());
 
-        ResultActions response1 = mockMvc.perform(post("/api/signin")
+        ResultActions responseSignin = mockMvc.perform(post("/api/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(user))
         );
 
-        response1.andDo(print())
+        responseSignin.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty());
+
     }
+
+    @Test
+    public void userEndpoints() throws Exception{
+
+        User user1 = new User();
+        user1.setFirstName("T");
+        user1.setLastName("A");
+        user1.setEmail("TA");
+        user1.setPassword("12353");
+
+        ResultActions responseGetAll= mockMvc.perform(get("/api/all")
+                        .with(user(user1.getEmail()).password(user1.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON));
+
+        responseGetAll.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$").isArray());
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user1.getEmail()).password(user1.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user1))
+        );
+
+        responseGetUserByEmail.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$.email", is(user1.getEmail())));
+    }
+
+
+
 }

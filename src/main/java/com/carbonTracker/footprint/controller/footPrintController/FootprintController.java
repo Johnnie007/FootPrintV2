@@ -96,6 +96,24 @@ public class FootprintController {
 
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable("id") int id, Principal principal){
+        Optional<User> user = userDao.findUserById(id);
+        if (user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if (!authEmail.equals(userEmail)) {
+                userDao.deleteUser(id);
+                return ResponseEntity.noContent().build();
+            }else{
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateUser(@Valid @RequestBody User user, @PathVariable("id") int id, Principal principal){
 
