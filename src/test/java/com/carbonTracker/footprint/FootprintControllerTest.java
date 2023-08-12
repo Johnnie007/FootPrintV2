@@ -32,34 +32,35 @@ public class FootprintControllerTest {
         user.setEmail("TA");
         user.setPassword("12353");
 
-        User user1 = new User();
-        user1.setFirstName("T");
-        user1.setLastName("A");
-        user1.setEmail("TA");
-        user1.setPassword("12353");
-
         ResponseEntity<?> response = restTemplate
                 .postForEntity("/api/signup", user, Void.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        ResponseEntity<?> respons2 = restTemplate
+                .postForEntity("/api/signup", user, Void.class);
+        assertThat(respons2.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
     @Test
     @DirtiesContext
-    @Order(2)
     void shouldSignInUser(){
 
         User user = new User();
         user.setEmail("TA");
         user.setPassword("12353");
 
-        User user1 = new User();
-        user1.setFirstName("T");
-        user1.setLastName("A");
-        user1.setEmail("TA");
-        user1.setPassword("12353");
+        User user2 = new User();
+        user2.setFirstName("T");
+        user2.setLastName("A");
+        user2.setEmail("TA");
+        user2.setPassword("NotMyPassword");
 
         ResponseEntity<String> response = restTemplate
                 .postForEntity("/api/signin", user, String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        ResponseEntity<String> response2 = restTemplate
+                .postForEntity("/api/signin", user2, String.class);
+        assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
 }
