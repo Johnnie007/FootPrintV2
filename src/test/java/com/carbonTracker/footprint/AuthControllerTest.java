@@ -96,7 +96,7 @@
 //                .andExpect(jsonPath("$.email", is(user1.getEmail())));
 //
 //        System.out.println("we are here");
-//        String contentAsStrinng = responseGetUserByEmail.andReturn().getResponse().getContentAsString();
+//        String contentAsString = responseGetUserByEmail.andReturn().getResponse().getContentAsString();
 //        System.out.println("we are here3");
 //
 //        //updates the users data

@@ -3,6 +3,8 @@ package com.carbonTracker.footprint;
 import com.carbonTracker.footprint.model.user.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.List;
 import java.util.Map;
@@ -112,7 +115,7 @@ public class FootprintControllerTest {
         user.setEmail("TA");
         user.setPassword("12353");
 
-        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
                 .with(user(user.getEmail()).password(user.getPassword()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(user))
@@ -122,6 +125,10 @@ public class FootprintControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$.email", is(user.getEmail())));
+        //Integer testUser = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
     }
+
+
 
 }

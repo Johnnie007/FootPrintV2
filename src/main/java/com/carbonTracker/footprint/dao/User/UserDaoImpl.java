@@ -67,7 +67,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<Map<String, Object>> getEmail(String email){
         String sql = """
-                SELECT email, password
+                SELECT id, email, password
                 FROM user
                 WHERE email = ?
                 """;
@@ -99,7 +99,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findUserEmail(String email){
         String sql = """
-                SELECT email, password
+                SELECT id, email, password
                 From user
                 WHERE email = ?
                 """;
