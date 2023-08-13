@@ -121,11 +121,42 @@ public class FootprintControllerTest {
                 .content(objectMapper.writeValueAsString(user))
         );
 
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
         responseGetUserByEmail.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$.id", is(userId)))
                 .andExpect(jsonPath("$.email", is(user.getEmail())));
-        //Integer testUser = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+    }
+
+    @Test
+    void shouldGetUserById() throws Exception{
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        ResultActions responseGetUserById= mockMvc.perform(get("/api/{id}", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        responseGetUserById.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$.id", is(userId)))
+                .andExpect(jsonPath("$.email", is(user.getEmail())));
 
     }
 
