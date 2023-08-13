@@ -1,10 +1,10 @@
 package com.carbonTracker.footprint;
 
 import com.carbonTracker.footprint.model.user.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -19,18 +19,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,7 +44,37 @@ public class FootprintControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    TestRestTemplate restTemplate;
+    private TestRestTemplate restTemplate;
+
+    private Integer userId;
+
+    @Test
+    @AfterClass
+    void deleteUser() throws Exception{
+
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)));
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+
+        ResultActions responseDeleteUser= mockMvc.perform(delete("/api/{id}", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)));
+
+        responseDeleteUser.andDo(print())
+                .andExpect(status().isNoContent());
+
+    }
 
     @Test
     @DirtiesContext
@@ -131,6 +159,35 @@ public class FootprintControllerTest {
     }
 
     @Test
+    @Order(2)
+    void shouldUpdateUser() throws Exception{
+
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        ResultActions responseUpdateUser= mockMvc.perform(put("/api/update/{id}", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        responseUpdateUser.andDo(print())
+                .andExpect(status().isNoContent());
+
+    }
+
+    @Test
     void shouldGetUserById() throws Exception{
         User user = new User();
         user.setFirstName("T");
@@ -156,6 +213,8 @@ public class FootprintControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$.id", is(userId)))
+                .andExpect(jsonPath("$.firstName",is(user.getFirstName())))
+                .andExpect(jsonPath("$.lastName",is(user.getLastName())))
                 .andExpect(jsonPath("$.email", is(user.getEmail())));
 
     }

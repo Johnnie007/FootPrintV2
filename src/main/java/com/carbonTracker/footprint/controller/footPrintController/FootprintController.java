@@ -103,7 +103,7 @@ public class FootprintController {
             String authEmail = principal.getName();
             String userEmail = user.get().getEmail();
 
-            if (!authEmail.equals(userEmail)) {
+            if (authEmail.equals(userEmail)) {
                 userDao.deleteUser(id);
                 return ResponseEntity.noContent().build();
             }else{
@@ -126,7 +126,7 @@ public class FootprintController {
             String authEmail = principal.getName();
             String userEmail = user.getEmail();
 
-            if(!userEmail.equals(authEmail)){
+            if(userEmail.equals(authEmail)){
                 userDao.updateUser(id, user);
                 return ResponseEntity.noContent().build();
             }
