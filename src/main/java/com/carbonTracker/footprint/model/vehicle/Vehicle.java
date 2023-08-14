@@ -18,12 +18,6 @@ public class Vehicle {
     @JsonProperty("userId")
     int userId;
 
-    public Vehicle(int id, String type, String mpg, int userId){
-        this.id = id;
-        this.type= type;
-        this.mpg = mpg;
-        this.userId = userId;
-    }
 
     public int getId() {
         return id;
@@ -45,7 +39,7 @@ public class Vehicle {
         return mpg;
     }
 
-    public void setMpg(String model) {
+    public void setMpg(String mpg) {
         this.mpg = mpg;
     }
 
@@ -62,7 +56,7 @@ public class Vehicle {
         return "Vehicle{" +
                 "id=" + id +
                 ", make='" + type + '\'' +
-                ", model='" + mpg + '\'' +
+                ", mpg='" + mpg + '\'' +
                 ", userId=" + userId +
                 '}';
     }

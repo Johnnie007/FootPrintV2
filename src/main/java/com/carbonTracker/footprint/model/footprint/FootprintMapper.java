@@ -45,10 +45,11 @@ public class FootprintMapper implements ResultSetExtractor {
 
                     vehicleList = new ArrayList<Vehicle>();
 
-                    Vehicle vehicle = new Vehicle(rs.getInt("v.id"),
-                            rs.getString("v.type"),
-                            rs.getString("v.mpg"),
-                            rs.getInt("v.userId"));
+                    Vehicle vehicle = new Vehicle();
+                            vehicle.setId(rs.getInt("v.id"));
+                            vehicle.setType(rs.getString("v.type"));
+                            vehicle.setMpg(rs.getString("v.mpg"));
+                            vehicle.setUserId(rs.getInt("v.userId"));
 
                     if(vehicle.getId() != 0) {
                         vehicleList.add(vehicle);
@@ -92,10 +93,11 @@ public class FootprintMapper implements ResultSetExtractor {
             if(footprint.getVehicles() != null){
                 List<Vehicle> vehicles = footprint.getVehicles();
 
-                Vehicle vehicle = new Vehicle(rs.getInt("v.id"),
-                        rs.getString("v.type"),
-                        rs.getString("v.mpg"),
-                        rs.getInt("v.userId"));
+                Vehicle vehicle = new Vehicle();
+                vehicle.setId(rs.getInt("v.id"));
+                vehicle.setType(rs.getString("v.type"));
+                vehicle.setMpg(rs.getString("v.mpg"));
+                vehicle.setUserId(rs.getInt("v.userId"));
 
                 boolean checkVehicleList = vehicles.stream().anyMatch(v -> v.getId() == vehicle.getId());
                 if(!checkVehicleList) {

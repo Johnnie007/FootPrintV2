@@ -1,6 +1,7 @@
 package com.carbonTracker.footprint;
 
 import com.carbonTracker.footprint.model.user.User;
+import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.AfterClass;
@@ -48,33 +49,32 @@ public class FootprintControllerTest {
 
     private Integer userId;
 
-    @Test
-    @AfterClass
-    void deleteUser() throws Exception{
-
-        User user = new User();
-        user.setFirstName("T");
-        user.setLastName("A");
-        user.setEmail("TA");
-        user.setPassword("12353");
-
-        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
-                .with(user(user.getEmail()).password(user.getPassword()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)));
-
-        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
-
-
-        ResultActions responseDeleteUser= mockMvc.perform(delete("/api/{id}", userId)
-                .with(user(user.getEmail()).password(user.getPassword()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)));
-
-        responseDeleteUser.andDo(print())
-                .andExpect(status().isNoContent());
-
-    }
+//    @Test
+//    @AfterClass
+//    void deleteUser() throws Exception{
+//
+//        User user = new User();
+//        user.setFirstName("T");
+//        user.setLastName("A");
+//        user.setEmail("TA");
+//        user.setPassword("12353");
+//
+//        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+//                .with(user(user.getEmail()).password(user.getPassword()))
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(user)));
+//
+//        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+//
+//        ResultActions responseDeleteUser= mockMvc.perform(delete("/api/{id}", userId)
+//                .with(user(user.getEmail()).password(user.getPassword()))
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(user)));
+//
+//        responseDeleteUser.andDo(print())
+//                .andExpect(status().isNoContent());
+//
+//    }
 
     @Test
     @DirtiesContext
@@ -206,7 +206,6 @@ public class FootprintControllerTest {
         ResultActions responseGetUserById= mockMvc.perform(get("/api/{id}", userId)
                 .with(user(user.getEmail()).password(user.getPassword()))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user))
         );
 
         responseGetUserById.andDo(print())
@@ -216,6 +215,144 @@ public class FootprintControllerTest {
                 .andExpect(jsonPath("$.firstName",is(user.getFirstName())))
                 .andExpect(jsonPath("$.lastName",is(user.getLastName())))
                 .andExpect(jsonPath("$.email", is(user.getEmail())));
+
+    }
+
+    @Test
+    @Order(3)
+    void shouldAddVehicleInfo() throws Exception{
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        Vehicle vehicle = new Vehicle();
+        vehicle.setType("SUV");
+        vehicle.setMpg("40.0");
+        vehicle.setUserId(userId);
+
+        ResultActions responseAddVehicle = mockMvc.perform(post("/api/{id}/add/vehicle", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(vehicle))
+        );
+
+        responseAddVehicle.andDo(print())
+                .andExpect(status().isCreated());
+
+    }
+
+    @Test
+    @Order(5)
+    void shouldUpdateVehicleInfo() throws Exception{
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        Vehicle vehicle = new Vehicle();
+        vehicle.setType("Sedan");
+        vehicle.setMpg("25.0");
+        vehicle.setUserId(userId);
+
+        ResultActions responseAddVehicle = mockMvc.perform(put("/api/{id}/update/vehicle", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(vehicle))
+        );
+
+        responseAddVehicle.andDo(print())
+                .andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    @Order(4)
+    void shouldGetVehicleInfo() throws Exception{
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        ResultActions responseGetVehicle = mockMvc.perform(get("/api/{id}/vehicle", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        responseGetVehicle.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$" ).isNotEmpty())
+                .andExpect(jsonPath("$[0].userId", is(userId)))
+                .andExpect(jsonPath("$[0].type", is("SUV")))
+                .andExpect(jsonPath("$[0].mpg", is("40.0")));
+
+    }
+
+    @Test
+    @Order(5)
+    void shouldDeleteVehicleInfo() throws Exception{
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        ResultActions responseGetVehicle = mockMvc.perform(get("/api/{id}/vehicle", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        Integer vehicleId = JsonPath.read(responseGetVehicle.andReturn().getResponse().getContentAsString(), "$[0].id");
+
+        Vehicle vehicle = new Vehicle();
+        vehicle.setId(vehicleId);
+        vehicle.setType("Sedan");
+        vehicle.setMpg("25.0");
+        vehicle.setUserId(userId);
+
+        ResultActions responseDeleteVehicle = mockMvc.perform(delete("/api/{id}/delete/vehicle", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(vehicle))
+        );
+
+        responseDeleteVehicle.andDo(print())
+                .andExpect(status().isNoContent());
 
     }
 

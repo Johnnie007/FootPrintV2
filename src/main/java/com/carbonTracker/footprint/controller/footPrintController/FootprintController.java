@@ -156,6 +156,8 @@ public class FootprintController {
     }
     @PostMapping("{id}/add/vehicle")
     public ResponseEntity<Void> addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id, UriComponentsBuilder ucb, Principal principal){
+        System.out.println(vehicle);
+
         Optional<User> user = userDao.findUserById(id);
 
         if(user.isPresent()) {
@@ -164,9 +166,10 @@ public class FootprintController {
             if(!authEmail.equals(userEmail)){
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }else {
+
                 int savedUserVehicle = vehicleDao.addUserVehicle(vehicle, id);
                 URI locationOfVehicle = ucb
-                        .path("footprint/{id}/add/vehicle")
+                        .path("api/{id}/add/vehicle")
                         .buildAndExpand(savedUserVehicle)
                         .toUri();
                 return ResponseEntity.created(locationOfVehicle).build();
