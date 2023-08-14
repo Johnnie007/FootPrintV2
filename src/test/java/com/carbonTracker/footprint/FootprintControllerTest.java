@@ -1,5 +1,6 @@
 package com.carbonTracker.footprint;
 
+import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,32 +50,32 @@ public class FootprintControllerTest {
 
     private Integer userId;
 
-//    @Test
-//    @AfterClass
-//    void deleteUser() throws Exception{
-//
-//        User user = new User();
-//        user.setFirstName("T");
-//        user.setLastName("A");
-//        user.setEmail("TA");
-//        user.setPassword("12353");
-//
-//        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
-//                .with(user(user.getEmail()).password(user.getPassword()))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(user)));
-//
-//        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
-//
-//        ResultActions responseDeleteUser= mockMvc.perform(delete("/api/{id}", userId)
-//                .with(user(user.getEmail()).password(user.getPassword()))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(user)));
-//
-//        responseDeleteUser.andDo(print())
-//                .andExpect(status().isNoContent());
-//
-//    }
+    @Test
+    @AfterClass
+    void deleteUser() throws Exception{
+
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)));
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        ResultActions responseDeleteUser= mockMvc.perform(delete("/api/{id}", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)));
+
+        responseDeleteUser.andDo(print())
+                .andExpect(status().isNoContent());
+
+    }
 
     @Test
     @DirtiesContext
@@ -356,6 +357,110 @@ public class FootprintControllerTest {
 
     }
 
+    @Test
+    @Order(6)
+    void shouldAddHome() throws Exception{
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        Home home = new Home();
+        home.setHomeSize(750);
+        home.setHomeType("condo");
+        home.setUserId(userId);
+
+
+        ResultActions responseAddUserHome = mockMvc.perform(post("/api/{id}/home",userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(home))
+        );
+
+        responseAddUserHome.andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @Order(7)
+    void shouldGetUserHome() throws Exception{
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        ResultActions responseGetHome = mockMvc.perform(get("/api/{id}/home", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        responseGetHome.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$[0].homeType", is("condo")))
+                .andExpect(jsonPath("$[0].homeSize", is(750)))
+                .andExpect(jsonPath("$[0].userId", is(userId)));
+    }
+
+    @Test
+    @Order(8)
+    void shouldDeleteHome()throws Exception{
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        ResultActions responseGetHome = mockMvc.perform(get("/api/{id}/home", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+
+        Integer homeId = JsonPath.read(responseGetHome.andReturn().getResponse().getContentAsString(), "$[0].id");
+
+        Home home = new Home();
+        home.setId(homeId);
+        home.setHomeSize(750);
+        home.setHomeType("condo");
+        home.setUserId(userId);
+
+        ResultActions responseDeleteHome = mockMvc.perform(delete("/api/{id}/delete/home", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(home))
+        );
+
+        responseDeleteHome.andDo(print())
+                .andExpect(status().isNoContent());
+
+    }
 
 
 }

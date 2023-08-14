@@ -20,7 +20,7 @@ public class HomeDaoImpl implements HomeDao{
     @Override
     public List<Home> getUserHomes(int userId){
         String sql = """
-                SELECT 
+                SELECT id, homeType, homeSize, userId
                 FROM home
                 WHERE userId = ?
                 """;

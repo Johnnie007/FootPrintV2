@@ -61,10 +61,11 @@ public class FootprintMapper implements ResultSetExtractor {
                 if(homeList == null){
                     homeList = new ArrayList<Home>();
 
-                    Home home = new Home(rs.getInt("h.id"),
-                            rs.getNString("h.homeType"),
-                            rs.getInt("h.homeSize"),
-                            rs.getInt("h.userId"));
+                    Home home = new Home();
+                    home.setId(rs.getInt("h.id"));
+                    home.setHomeType(rs.getNString("h.homeType"));
+                    home.setHomeSize(rs.getInt("h.homeSize"));
+                    home.setUserId(rs.getInt("h.userId"));
 
                     if(home.getId() != 0) {
                         homeList.add(home);
@@ -110,10 +111,11 @@ public class FootprintMapper implements ResultSetExtractor {
             if(footprint.getHomes() != null){
                 List<Home> homes = footprint.getHomes();
 
-                Home home = new Home(rs.getInt("h.id"),
-                        rs.getNString("h.homeType"),
-                        rs.getInt("h.homeSize"),
-                        rs.getInt("h.userId"));
+                Home home = new Home();
+                        home.setId(rs.getInt("h.id"));
+                        home.setHomeType(rs.getNString("h.homeType"));
+                        home.setHomeSize(rs.getInt("h.homeSize"));
+                        home.setUserId(rs.getInt("h.userId"));
 
                 boolean checkHomeList = homes.stream().anyMatch(h -> h.getId() == home.getId());
                 if(!checkHomeList) {

@@ -21,13 +21,6 @@ public class Home {
     @JsonProperty("userId")
     private int userId;
 
-    public Home(int id, String homeType, int homeSize, int userId){
-        this.id = id;
-        this.homeType = homeType;
-        this.homeSize = homeSize;
-        this.userId = userId;
-    }
-
     public int getId() {
         return id;
     }

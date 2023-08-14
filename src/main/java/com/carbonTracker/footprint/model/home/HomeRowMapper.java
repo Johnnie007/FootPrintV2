@@ -8,11 +8,11 @@ public class HomeRowMapper implements RowMapper<Home>{
 
     @Override
     public Home mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Home(
-                rs.getInt("id"),
-                rs.getNString("homeType"),
-                rs.getInt("homeSize"),
-                rs.getInt("userId")
-        );
+        Home home = new Home();
+        home.setId(rs.getInt("id"));
+        home.setHomeType(rs.getNString("homeType"));
+        home.setHomeSize(rs.getInt("homeSize"));
+        home.setUserId(rs.getInt("userId"));
+        return home;
     }
 }
