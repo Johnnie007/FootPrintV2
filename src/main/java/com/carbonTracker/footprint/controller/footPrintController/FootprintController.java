@@ -355,7 +355,7 @@ public class FootprintController {
     }
 
     @PostMapping("{id}/upload")
-    public ResponseEntity<?> uploadImage(@PathVariable("id") int id, MultipartFile file, Principal principal) throws IOException {
+    public ResponseEntity<?> uploadImage(@PathVariable("id") int id, @RequestBody MultipartFile file, Principal principal){
         Optional<UserImage> image = userImageService.getImage(id);
         Optional<User> user = userDao.findUserById(id);
 
@@ -372,6 +372,7 @@ public class FootprintController {
                         .path(Integer.toString(id))
                         .path("/image")
                         .toUriString();
+
 
                 return new ResponseEntity<>(new UploadFileResponse(file.getOriginalFilename(), fileDownloadUri,
                         file.getContentType(), file.getSize()), HttpStatus.OK);
