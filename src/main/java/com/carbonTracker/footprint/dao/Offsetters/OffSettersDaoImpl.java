@@ -36,4 +36,14 @@ public class OffSettersDaoImpl implements OffSettersDao {
                 """;
         return jdbcTemplate.update(sql, offsetters.getType(), offsetters.getProduct(), offsetters.getCCS(), id);
     }
+
+    @Override
+    public int deleteOffSetter(int userId, OffSetters offSetters){
+        String sql = """
+                DELETE FROM OffSetters
+                WHERE userId = ? and id = ?
+                """;
+
+        return jdbcTemplate.update(sql, userId, offSetters.getId());
+    }
 }

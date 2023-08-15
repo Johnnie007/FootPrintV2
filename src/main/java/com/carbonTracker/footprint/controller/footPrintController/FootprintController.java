@@ -337,6 +337,23 @@ public class FootprintController {
         }
     }
 
+    @DeleteMapping("{id}/offsetters")
+    public ResponseEntity<Void> deleteOffsetters(@PathVariable("id") int userId, @Valid @RequestBody OffSetters offSetters, Principal principal){
+        Optional<User> user = userDao.findUserById(userId);
+        if(user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+            if (!authEmail.equals(userEmail)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                offSettersDao.deleteOffSetter(userId, offSetters);
+                return ResponseEntity.noContent().build();
+            }
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("{id}/upload")
     public ResponseEntity<?> uploadImage(@PathVariable("id") int id, MultipartFile file, Principal principal) throws IOException {
         Optional<UserImage> image = userImageService.getImage(id);

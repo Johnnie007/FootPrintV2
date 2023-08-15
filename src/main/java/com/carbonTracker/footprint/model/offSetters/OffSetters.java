@@ -26,14 +26,6 @@ public class OffSetters {
     @JsonProperty("userId")
     private int userId;
 
-    public OffSetters(int id, String type, String product, int CCS, int userId){
-        this.id = id;
-        this.type = type;
-        this.product = product;
-        this.CCS = CCS;
-        this.userId = userId;
-    }
-
     public int getId() { return id;}
 
     public String getType() {

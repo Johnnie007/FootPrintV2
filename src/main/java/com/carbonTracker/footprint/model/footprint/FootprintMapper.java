@@ -77,12 +77,13 @@ public class FootprintMapper implements ResultSetExtractor {
                 if(offSettersList == null){
                     offSettersList = new ArrayList();
 
-                    OffSetters offSetters = new OffSetters(rs.getInt("o.id"),
-                            rs.getNString("o.type"),
-                            rs.getNString("o.product"),
-                            rs.getInt("o.CCS"),
-                            rs.getInt("userId")
-                           );
+                    OffSetters offSetters = new OffSetters();
+                    offSetters.setId(rs.getInt("o.id"));
+                    offSetters.setType(rs.getNString("o.type"));
+                    offSetters.setProduct(rs.getNString("o.product"));
+                    offSetters.setCCS(rs.getInt("o.CCS"));
+                    offSetters.setUserId(rs.getInt("userId"));
+
                     if(offSetters.getId() != 0) {
                         offSettersList.add(offSetters);
                         footprint.setOffSetters(offSettersList);
@@ -128,13 +129,13 @@ public class FootprintMapper implements ResultSetExtractor {
             if(footprint.getOffSetters() != null){
                 List<OffSetters> offSetters = footprint.getOffSetters();
 
-                OffSetters offSetter = new OffSetters(
-                        rs.getInt("o.id"),
-                        rs.getNString("o.type"),
-                        rs.getNString("o.product"),
-                        rs.getInt("o.CCS"),
-                        rs.getInt("userId")
-                        );
+                OffSetters offSetter = new OffSetters();
+                offSetter.setId(rs.getInt("o.id"));
+                offSetter.setType(rs.getNString("o.type"));
+                offSetter.setProduct(rs.getNString("o.product"));
+                offSetter.setCCS(rs.getInt("o.CCS"));
+                offSetter.setUserId(rs.getInt("userId"));
+
 
                 boolean checkOffSetterList = offSetters.stream().anyMatch(o -> o.getId() == offSetter.getId());
                 if(!checkOffSetterList){

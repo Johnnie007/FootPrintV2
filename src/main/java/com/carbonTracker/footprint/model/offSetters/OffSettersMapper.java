@@ -9,12 +9,13 @@ public class OffSettersMapper implements RowMapper<OffSetters> {
 
     @Override
     public OffSetters mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new OffSetters(
-                rs.getInt("id"),
-                rs.getNString("type"),
-                rs.getNString("product"),
-                rs.getInt("CCS"),
-                rs.getInt("userId")
-                );
+        OffSetters offSetters = new OffSetters();
+                offSetters.setId(rs.getInt("id"));
+                offSetters.setType(rs.getNString("type"));
+                offSetters.setProduct(rs.getNString("product"));
+                offSetters.setCCS(rs.getInt("CCS"));
+                offSetters.setUserId(rs.getInt("userId"));
+
+                return offSetters;
     }
 }

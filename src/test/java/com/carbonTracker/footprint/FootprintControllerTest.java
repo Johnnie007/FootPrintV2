@@ -1,6 +1,7 @@
 package com.carbonTracker.footprint;
 
 import com.carbonTracker.footprint.model.home.Home;
+import com.carbonTracker.footprint.model.offSetters.OffSetters;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -460,6 +461,116 @@ public class FootprintControllerTest {
         responseDeleteHome.andDo(print())
                 .andExpect(status().isNoContent());
 
+    }
+
+    @Test
+    @Order(10)
+    void shouldAddOffSetters() throws Exception {
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        OffSetters offSetters = new OffSetters();
+        offSetters.setType("Plant");
+        offSetters.setCCS(5);
+        offSetters.setProduct("Succulent");
+        offSetters.setUserId(userId);
+
+
+        ResultActions responseAddOffSetters = mockMvc.perform(post("/api/{id}/offsetters",userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(offSetters))
+        );
+
+        responseAddOffSetters.andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @Order(11)
+    void shouldGetOffsetters() throws Exception{
+
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        ResultActions responseOffSetters = mockMvc.perform(get("/api/{id}/offsetters", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        responseOffSetters.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$[0].type", is("Plant")))
+                .andExpect(jsonPath("$[0].product", is("Succulent")))
+                .andExpect(jsonPath("$[0].CCS", is(5)))
+                .andExpect(jsonPath("$[0].userId", is(userId)));
+
+    }
+
+    @Test
+    @Order(12)
+    void shouldDeleteOffsetters() throws Exception{
+
+        User user = new User();
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
+        user.setPassword("12353");
+
+        ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
+        );
+
+        Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
+
+        ResultActions responseGetOffSetter = mockMvc.perform(get("/api/{id}/offsetters", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+
+        Integer offSetterId = JsonPath.read(responseGetOffSetter.andReturn().getResponse().getContentAsString(), "$[0].id");
+
+        OffSetters offSetters = new OffSetters();
+        offSetters.setId(offSetterId);
+        offSetters.setType("type");
+        offSetters.setCCS(5);
+        offSetters.setProduct("Succulent");
+        offSetters.setUserId(userId);
+
+        ResultActions responseDeleteHome = mockMvc.perform(delete("/api/{id}/offsetters", userId)
+                .with(user(user.getEmail()).password(user.getPassword()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(offSetters))
+        );
+
+        responseDeleteHome.andDo(print())
+                .andExpect(status().isNoContent());
     }
 
 

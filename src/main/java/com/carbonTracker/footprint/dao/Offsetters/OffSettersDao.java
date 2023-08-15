@@ -9,4 +9,6 @@ public interface OffSettersDao {
     List<OffSetters> getOffSetters(int id);
     int addOffSetter(OffSetters offsetters, int id);
 
+    int deleteOffSetter(int userId, OffSetters offSetters);
+
 }
