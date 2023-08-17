@@ -5,10 +5,8 @@ import com.carbonTracker.footprint.model.offSetters.OffSetters;
 import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -24,10 +22,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
