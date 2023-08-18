@@ -45,4 +45,14 @@ public class HomeDaoImpl implements HomeDao{
         return jdbcTemplate.update(sql, home.getUserId(), home.getId());
     }
 
+    @Override
+    public int updateHome(Home home, int userId){
+        String sql = """
+                UPDATE home
+                SET homeType = ?, homeSize = ?
+                WHERE userId = ?
+                """;
+        return jdbcTemplate.update(sql, home.getHomeType(), home.getHomeSize(), userId);
+    }
+
 }

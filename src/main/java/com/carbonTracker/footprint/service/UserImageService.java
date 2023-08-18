@@ -14,8 +14,6 @@ import java.util.Optional;
 @Service
 public class UserImageService {
 
-
-
     @Autowired
     private UserImageDao userImageDao;
 

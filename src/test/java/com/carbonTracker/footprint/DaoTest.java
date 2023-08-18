@@ -14,6 +14,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.*;
+
 @ExtendWith(MockitoExtension.class)
 public class DaoTest {
 
@@ -51,4 +53,51 @@ public class DaoTest {
         Assertions.assertEquals(1, userCreated);
 
     }
+
+    @Test
+    public void findUserByEmail(){
+        String sql = """
+                SELECT id, email, password
+                From user
+                WHERE email = ?
+                """;
+
+        String email = "Testing@test.com";
+
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("email", email);
+        list.add(map);
+
+        Mockito.when(jdbcTemplate.queryForList(Mockito.anyString(), Mockito.any(Object.class))).thenReturn(list);
+
+        Optional<User> getUser = userDao.findUserEmail(email);
+        Assertions.assertEquals(email, getUser.get().getEmail());
+    }
+
+    @Test
+    public void updateUser(){
+        String sql = """
+                UPDATE user
+                SET first_name = ?, last_name = ?, email = ?, footPrint = ?, lifeStyle = ?
+                WHERE id = ?;
+                """;
+
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("Test");
+        user.setLastName("Testing");
+        user.setEmail("Testing@test.com");
+        user.setFootPrint(293);
+        user.setPassword("123");
+        user.setLifeStyle("HomeBody");
+
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(),Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyInt())).thenReturn(1);
+        int updateUser = userDao.updateUser(user.getId(),user);
+
+        Assertions.assertEquals(1,updateUser);
+    }
+
+
 }

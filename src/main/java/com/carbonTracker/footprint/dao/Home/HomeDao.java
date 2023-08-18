@@ -10,4 +10,6 @@ public interface HomeDao {
     int addHome(Home home, int userId);
     int deleteHome(Home home, int userId);
 
+    int updateHome(Home home, int userId);
+
 }
