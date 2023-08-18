@@ -3,10 +3,13 @@ package com.carbonTracker.footprint;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.User.UserDaoImpl;
 import com.carbonTracker.footprint.model.user.User;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -28,9 +31,19 @@ public class DaoTest {
     @Mock
     private JdbcTemplate jdbcTemplate;
 
-    @Before
-    public void setup(){
-        MockitoAnnotations.initMocks(this);
+    @ParameterizedTest
+    @ValueSource(ints = 1)
+    @AfterClass
+    public void deleteUser(int id){
+        String sql = """
+                DELETE FROM user
+                WHERE id = ?
+                """;
+        int userId = 1;
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyInt())).thenReturn(1);
+        int deleteUser = userDao.deleteUser(userId);
+
+        Assertions.assertEquals(1,deleteUser);
     }
 
     @Test
@@ -98,6 +111,5 @@ public class DaoTest {
 
         Assertions.assertEquals(1,updateUser);
     }
-
 
 }
