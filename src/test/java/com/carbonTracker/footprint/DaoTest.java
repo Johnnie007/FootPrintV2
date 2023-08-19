@@ -1,8 +1,12 @@
 package com.carbonTracker.footprint;
 
+import com.carbonTracker.footprint.dao.Home.HomeDaoImpl;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.User.UserDaoImpl;
+import com.carbonTracker.footprint.model.home.Home;
+import com.carbonTracker.footprint.model.home.HomeRowMapper;
 import com.carbonTracker.footprint.model.user.User;
+import org.hamcrest.Matchers;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
@@ -10,35 +14,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DaoTest {
 
-    @Mock
-    private UserDao dao;
-
     @InjectMocks
     private UserDaoImpl userDao;
+
+    @InjectMocks
+    private HomeDaoImpl homeDao;
 
     @Mock
     private JdbcTemplate jdbcTemplate;
 
     @ParameterizedTest
     @ValueSource(ints = 1)
-    @AfterClass
     public void deleteUser(int id){
-        String sql = """
-                DELETE FROM user
-                WHERE id = ?
-                """;
         int userId = 1;
         Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyInt())).thenReturn(1);
         int deleteUser = userDao.deleteUser(userId);
@@ -69,11 +66,6 @@ public class DaoTest {
 
     @Test
     public void findUserByEmail(){
-        String sql = """
-                SELECT id, email, password
-                From user
-                WHERE email = ?
-                """;
 
         String email = "Testing@test.com";
 
@@ -90,12 +82,6 @@ public class DaoTest {
 
     @Test
     public void updateUser(){
-        String sql = """
-                UPDATE user
-                SET first_name = ?, last_name = ?, email = ?, footPrint = ?, lifeStyle = ?
-                WHERE id = ?;
-                """;
-
         User user = new User();
         user.setId(1);
         user.setFirstName("Test");
@@ -111,5 +97,63 @@ public class DaoTest {
 
         Assertions.assertEquals(1,updateUser);
     }
+
+    @Test
+    public void getUserHome(){
+        Home home = new Home();
+        home.setUserId(1);
+        home.setHomeSize(704);
+        home.setHomeType("Condo");
+
+        List<Home> homes = new ArrayList<Home>();
+        homes.add(home);
+
+        Mockito.when(jdbcTemplate.query(Mockito.anyString(), ArgumentMatchers.<RowMapper<Home>>any(), Mockito.anyInt())).thenReturn(homes);
+        List<Home> getHomes = homeDao.getUserHomes(home.getUserId());
+
+        Assertions.assertEquals(704, getHomes.stream().findFirst().get().getHomeSize());
+    }
+
+    @Test
+    public void addHome(){
+        Home home = new Home();
+        home.setUserId(1);
+        home.setHomeSize(704);
+        home.setHomeType("Condo");
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(),  Mockito.anyInt())).thenReturn(1);
+
+        int addHome = homeDao.addHome(home, 1);
+
+        Assertions.assertEquals(1,addHome);
+    }
+
+    @Test
+    public void updateHome(){
+        Home home = new Home();
+        home.setUserId(1);
+        home.setHomeSize(1000);
+        home.setHomeType("Apartment");
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+
+        int updateHome = homeDao.updateHome(home, 1);
+
+        Assertions.assertEquals(1, updateHome);
+    }
+
+    @Test
+    public void deleteHome(){
+        Home home = new Home();
+        home.setUserId(1);
+        home.setHomeSize(704);
+        home.setHomeType("Condo");
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+        int deleteHome = homeDao.deleteHome(home, 1);
+
+        Assertions.assertEquals(1,deleteHome);
+    }
+
 
 }
