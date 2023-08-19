@@ -3,9 +3,12 @@ package com.carbonTracker.footprint;
 import com.carbonTracker.footprint.dao.Home.HomeDaoImpl;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.User.UserDaoImpl;
+import com.carbonTracker.footprint.dao.Vehicle.VehicleDaoImpl;
 import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.home.HomeRowMapper;
+import com.carbonTracker.footprint.model.offSetters.OffSetters;
 import com.carbonTracker.footprint.model.user.User;
+import com.carbonTracker.footprint.model.vehicle.Vehicle;
 import org.hamcrest.Matchers;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,6 +32,12 @@ public class DaoTest {
 
     @InjectMocks
     private HomeDaoImpl homeDao;
+
+    @InjectMocks
+    private VehicleDaoImpl vehicleDao;
+
+    @InjectMocks
+    private OffSetters offSetters;
 
     @Mock
     private JdbcTemplate jdbcTemplate;
@@ -153,6 +162,70 @@ public class DaoTest {
         int deleteHome = homeDao.deleteHome(home, 1);
 
         Assertions.assertEquals(1,deleteHome);
+    }
+
+    @Test
+    public void addVehicle(){
+
+        Vehicle vehicle = new Vehicle();
+
+        vehicle.setMpg("32.4");
+        vehicle.setType("SUV");
+        vehicle.setUserId(1);
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt())).thenReturn(1);
+
+        int addVehicle = vehicleDao.addUserVehicle(vehicle,1);
+
+        Assertions.assertEquals(1,addVehicle);
+    }
+
+    @Test
+    public void updateVehicle(){
+
+        Vehicle vehicle = new Vehicle();
+        vehicle.setId(1);
+        vehicle.setMpg("0.0");
+        vehicle.setType("SUV");
+        vehicle.setUserId(1);
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+
+        int updateUserVehicle = vehicleDao.updateUserVehicle(vehicle, 1);
+        Assertions.assertEquals(1, updateUserVehicle);
+    }
+
+    @Test
+    public void findVehicleByUserId(){
+        Vehicle vehicle = new Vehicle();
+        vehicle.setId(1);
+        vehicle.setMpg("0.0");
+        vehicle.setType("SUV");
+        vehicle.setUserId(1);
+
+        List <Vehicle> vehicles= new ArrayList<Vehicle>();
+        vehicles.add(vehicle);
+
+
+        Mockito.when(jdbcTemplate.query(Mockito.anyString(), ArgumentMatchers.<RowMapper<Vehicle>>any(), Mockito.anyInt())).thenReturn(vehicles);
+        List <Vehicle> getVehicle = vehicleDao.findVehicleByUserId(1);
+        Assertions.assertEquals(vehicle.getType(), getVehicle.stream().findFirst().get().getType());
+    }
+
+
+    @Test
+    public void deleteVehicle(){
+        Vehicle vehicle = new Vehicle();
+        vehicle.setId(1);
+        vehicle.setMpg("0.0");
+        vehicle.setType("SUV");
+        vehicle.setUserId(1);
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+
+        int deleteVehicle = vehicleDao.deleteVehicle(vehicle.getUserId(), vehicle);
+
+        Assertions.assertEquals(1, deleteVehicle);
     }
 
 
