@@ -1,11 +1,13 @@
 package com.carbonTracker.footprint;
 
+import com.carbonTracker.footprint.dao.Footprint.FootprintDaoImpl;
 import com.carbonTracker.footprint.dao.Home.HomeDaoImpl;
 import com.carbonTracker.footprint.dao.Offsetters.OffSettersDaoImpl;
 import com.carbonTracker.footprint.dao.RecommendationList.RecommendationListDaoImpl;
 import com.carbonTracker.footprint.dao.User.UserDaoImpl;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDaoImpl;
 import com.carbonTracker.footprint.dao.userImage.UserImageDaoImpl;
+import com.carbonTracker.footprint.model.footprint.Footprint;
 import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.offSetters.OffSetters;
 import com.carbonTracker.footprint.model.recommendationList.RecommendationList;
@@ -20,6 +22,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.util.*;
@@ -44,6 +47,9 @@ public class DaoTest {
 
     @InjectMocks
     private UserImageDaoImpl userImageDao;
+
+    @InjectMocks
+    private FootprintDaoImpl footprintDao;
 
     @Mock
     private JdbcTemplate jdbcTemplate;
@@ -314,6 +320,106 @@ public class DaoTest {
 
         int addUserImage = userImageDao.addUserImage(userImage, userImage.getUserId());
         Assertions.assertEquals(1,addUserImage);
+    }
+
+    @Test
+    public void updateUserImage(){
+        byte[] bytes = { (byte) 204, 29, (byte) 207, (byte) 217 };
+        UserImage userImage = new UserImage();
+        userImage.setUserId(1);
+        userImage.setImageName("dog");
+        userImage.setType("png");
+        userImage.setImageData(bytes);
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyInt())).thenReturn(1);
+
+        int updateUserImage = userImageDao.updateUserImage(1, userImage);
+        Assertions.assertEquals(1, updateUserImage);
+
+    }
+
+    @Test
+    public void findUserImage(){
+        byte[] bytes = { (byte) 204, 29, (byte) 207, (byte) 217 };
+        UserImage userImage = new UserImage();
+        userImage.setUserId(1);
+        userImage.setImageName("dog");
+        userImage.setType("png");
+        userImage.setImageData(bytes);
+
+        List <UserImage> image = new ArrayList<UserImage>();
+        image.add(userImage);
+
+        Mockito.when(jdbcTemplate.query(Mockito.anyString(), ArgumentMatchers.<RowMapper<UserImage>>any(), Mockito.anyInt())).thenReturn(image);
+
+        Optional <UserImage> getImage = userImageDao.findUserImage(1);
+        Assertions.assertEquals("dog", getImage.get().getImageName());
+    }
+
+    @Test
+    public  void deleteUserImage(){
+        byte[] bytes = { (byte) 204, 29, (byte) 207, (byte) 217 };
+        UserImage userImage = new UserImage();
+        userImage.setUserId(1);
+        userImage.setImageName("dog");
+        userImage.setType("png");
+        userImage.setImageData(bytes);
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyInt())).thenReturn(1);
+
+        int deleteImage = userImageDao.deleteUserImage(1);
+        Assertions.assertEquals(1, deleteImage);
+    }
+
+    @Test
+    public void  getUserFootPrint(){
+
+        User user = new User();
+        user.setId(1);
+        user.setFirstName("Test");
+        user.setLastName("Testing");
+        user.setEmail("Testing@test.com");
+        user.setPassword("123");
+
+        Home home = new Home();
+        home.setUserId(1);
+        home.setHomeSize(704);
+        home.setHomeType("Condo");
+
+        List<Home> homes = new ArrayList<Home>();
+        homes.add(home);
+
+        Vehicle vehicle = new Vehicle();
+        vehicle.setId(1);
+        vehicle.setMpg("0.0");
+        vehicle.setType("SUV");
+        vehicle.setUserId(1);
+
+        List<Vehicle> vehicles = new ArrayList<Vehicle>();
+        vehicles.add(vehicle);
+
+        OffSetters offSetters = new OffSetters();
+        offSetters.setUserId(1);
+        offSetters.setCCS(200);
+        offSetters.setProduct("Succulent");
+        offSetters.setType("Plant");
+
+        List<OffSetters> offSettersList = new ArrayList<OffSetters>();
+        offSettersList.add(offSetters);
+
+        Footprint footprint = new Footprint();
+        footprint.setUser(user);
+        footprint.setVehicles(vehicles);
+        footprint.setOffSetters(offSettersList);
+        footprint.setHomes(homes);
+
+        List <Footprint> footprintList = new ArrayList<Footprint>();
+        footprintList.add(footprint);
+
+        Mockito.when(jdbcTemplate.query(Mockito.anyString(),ArgumentMatchers.<ResultSetExtractor<List>>any(), Mockito.anyInt())).thenReturn(footprintList);
+        List <Footprint> getFootPrint = footprintDao.getUserFootprint(1);
+
+       Assertions.assertEquals(1, getFootPrint.stream().findFirst().get().getUser().getId());
     }
 
 }
