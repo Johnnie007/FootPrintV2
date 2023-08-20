@@ -25,14 +25,6 @@ public class RecommendationList {
     @JsonProperty("CCS")
     private int CCS;
 
-    public RecommendationList(int id, String type, String product, String productLocation, int CCS){
-        this.id = id;
-        this.type = type;
-        this.product = product;
-        this.productLocation = productLocation;
-        this.CCS = CCS;
-    }
-
     public int getId() {
         return id;
     }

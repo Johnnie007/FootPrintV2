@@ -1,17 +1,17 @@
 package com.carbonTracker.footprint;
 
 import com.carbonTracker.footprint.dao.Home.HomeDaoImpl;
-import com.carbonTracker.footprint.dao.User.UserDao;
+import com.carbonTracker.footprint.dao.Offsetters.OffSettersDaoImpl;
+import com.carbonTracker.footprint.dao.RecommendationList.RecommendationListDaoImpl;
 import com.carbonTracker.footprint.dao.User.UserDaoImpl;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDaoImpl;
+import com.carbonTracker.footprint.dao.userImage.UserImageDaoImpl;
 import com.carbonTracker.footprint.model.home.Home;
-import com.carbonTracker.footprint.model.home.HomeRowMapper;
 import com.carbonTracker.footprint.model.offSetters.OffSetters;
+import com.carbonTracker.footprint.model.recommendationList.RecommendationList;
 import com.carbonTracker.footprint.model.user.User;
+import com.carbonTracker.footprint.model.userImage.UserImage;
 import com.carbonTracker.footprint.model.vehicle.Vehicle;
-import org.hamcrest.Matchers;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +37,13 @@ public class DaoTest {
     private VehicleDaoImpl vehicleDao;
 
     @InjectMocks
-    private OffSetters offSetters;
+    private OffSettersDaoImpl offSettersDao;
+
+    @InjectMocks
+    private RecommendationListDaoImpl recommendationListDao;
+
+    @InjectMocks
+    private UserImageDaoImpl userImageDao;
 
     @Mock
     private JdbcTemplate jdbcTemplate;
@@ -228,5 +234,86 @@ public class DaoTest {
         Assertions.assertEquals(1, deleteVehicle);
     }
 
+    @Test
+    public void getRecommendationList(){
+        RecommendationList recommendationList = new RecommendationList();
+        recommendationList.setCCS(200);
+        recommendationList.setType("Plant");
+        recommendationList.setProductLocation("www.plant.com");
+        recommendationList.setProduct("Succulent");
+
+        List <RecommendationList> getList = new ArrayList<RecommendationList>();
+
+        getList.add(recommendationList);
+
+        Mockito.when(jdbcTemplate.query(Mockito.anyString(), ArgumentMatchers.<RowMapper<RecommendationList>>any())).thenReturn(getList);
+
+        List <RecommendationList> findList = recommendationListDao.getRecommendation();
+
+        Assertions.assertEquals(200, findList.stream().findFirst().get().getCCS());
+    }
+
+    @Test
+    public void getOffsetters(){
+        OffSetters offSetters = new OffSetters();
+        offSetters.setUserId(1);
+        offSetters.setCCS(200);
+        offSetters.setProduct("Succulent");
+        offSetters.setType("Plant");
+
+        List <OffSetters> getList = new ArrayList<OffSetters>();
+        getList.add(offSetters);
+
+        Mockito.when(jdbcTemplate.query(Mockito.anyString(), ArgumentMatchers.<RowMapper<OffSetters>>any(), Mockito.anyInt())).thenReturn(getList);
+
+        List <OffSetters> getOffSettersList = offSettersDao.getOffSetters(1);
+
+        Assertions.assertEquals("Plant", getOffSettersList.stream().findFirst().get().getType());
+    }
+
+    @Test
+    public void addOffsetter(){
+        OffSetters offSetters = new OffSetters();
+        offSetters.setUserId(1);
+        offSetters.setCCS(200);
+        offSetters.setProduct("Succulent");
+        offSetters.setType("Plant");
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+
+        int addOffsetter = offSettersDao.addOffSetter(offSetters,offSetters.getUserId());
+
+        Assertions.assertEquals(1, addOffsetter);
+    }
+
+    @Test
+    public void deleteOffSetter(){
+        OffSetters offSetters = new OffSetters();
+        offSetters.setUserId(1);
+        offSetters.setCCS(200);
+        offSetters.setProduct("Succulent");
+        offSetters.setType("Plant");
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+
+        int deleteOffsetter = offSettersDao.deleteOffSetter(offSetters.getUserId(), offSetters);
+
+        Assertions.assertEquals(1, deleteOffsetter);
+    }
+
+    @Test
+    public void addUserImage(){
+        byte[] bytes = { (byte) 204, 29, (byte) 207, (byte) 217 };
+        UserImage userImage = new UserImage();
+        userImage.setUserId(1);
+        userImage.setImageName("dog");
+        userImage.setType("png");
+        userImage.setImageData(bytes);
+
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(), Mockito.anyInt())).thenReturn(1);
+
+        int addUserImage = userImageDao.addUserImage(userImage, userImage.getUserId());
+        Assertions.assertEquals(1,addUserImage);
+    }
 
 }

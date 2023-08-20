@@ -9,12 +9,13 @@ public class RecommendationListRowMapper implements RowMapper<RecommendationList
 
     @Override
     public RecommendationList mapRow(ResultSet rs, int rowNum) throws SQLException{
-        return new RecommendationList(
-                rs.getInt("id"),
-                rs.getNString("type"),
-                rs.getNString("product"),
-                rs.getNString("productLocation"),
-                rs.getInt("CCS")
-        );
+        RecommendationList recommendationList = new RecommendationList();
+                recommendationList.setId(rs.getInt("id"));
+                recommendationList.setType(rs.getNString("type"));
+                recommendationList.setProduct(rs.getNString("product"));
+                recommendationList.setProductLocation(rs.getNString("productLocation"));
+                recommendationList.setCCS(rs.getInt("CCS"));
+
+                return recommendationList;
     }
 }

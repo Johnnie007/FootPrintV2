@@ -48,7 +48,6 @@ public class FootprintControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private Integer userId;
 
     @Test
     @AfterClass
@@ -120,7 +119,7 @@ public class FootprintControllerTest {
     }
 
     @Test
-    void shouldGetAllUsers() throws Exception {
+    void shouldGetAllUsers() {
         User user = new User();
         user.setFirstName("T");
         user.setLastName("A");
