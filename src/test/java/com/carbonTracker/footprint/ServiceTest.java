@@ -1,7 +1,10 @@
 package com.carbonTracker.footprint;
 
+import com.carbonTracker.footprint.dao.User.UserDaoImpl;
 import com.carbonTracker.footprint.dao.userImage.UserImageDaoImpl;
+import com.carbonTracker.footprint.model.user.User;
 import com.carbonTracker.footprint.model.userImage.UserImage;
+import com.carbonTracker.footprint.service.CustomUserDetailsService;
 import com.carbonTracker.footprint.service.UserImageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +31,12 @@ public class ServiceTest {
 
     @InjectMocks
     private UserImageService userImageService;
+
+    @Mock
+    UserDaoImpl userDaoImpl;
+
+    @InjectMocks
+    private CustomUserDetailsService customUserDetailsService;
 
     @Mock
     private JdbcTemplate jdbcTemplate;
@@ -71,6 +82,22 @@ public class ServiceTest {
         int deleteImage = userImageService.deleteImage(1);
 
         Assertions.assertEquals(1,deleteImage);
+    }
+
+    @Test
+    void shouldTestCustomUSerDetails(){
+
+        customUserDetailsService = new CustomUserDetailsService(userDaoImpl);
+        User user = new User();
+        user.setFirstName("Test");
+        user.setLastName("Testing");
+        user.setEmail("Testing@test.com");
+        user.setPassword("123");
+
+        Mockito.when(userDaoImpl.findUserEmail(Mockito.anyString())).thenReturn(Optional.of(user));
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getEmail());
+
+        Assertions.assertNotNull(userDetails);
     }
 
 }
