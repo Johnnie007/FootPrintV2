@@ -70,11 +70,6 @@ public class FootprintController {
         return ResponseEntity.created(locationOfUser).build();
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Map<String, Object>> > findAll(){
-        return ResponseEntity.ok(userDao.findAllUsers());
-    }
-
     @GetMapping("/email")
     public ResponseEntity<Optional<Map<String, Object>>> findEmail(@RequestBody User user){
         return ResponseEntity.ok(userDao.getEmail(user.getEmail()));

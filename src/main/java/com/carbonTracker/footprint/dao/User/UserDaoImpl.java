@@ -42,17 +42,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<Map<String, Object>> findAllUsers() {
-        String sql = """
-                SELECT first_name, last_name, footprint, lifeStyle
-                FROM user
-                LIMIT 100;
-                """;
-        List<Map<String, Object>> listOfUser = jdbcTemplate.queryForList(sql, new Object[] {});
-        return listOfUser;
-    }
-
-    @Override
     public Optional <User> findUserById(int id){
         String sql = """
                 SELECT *

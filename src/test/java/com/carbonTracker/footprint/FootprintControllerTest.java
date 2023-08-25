@@ -22,12 +22,9 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -118,21 +115,6 @@ public class FootprintControllerTest {
         assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
-    @Test
-    void shouldGetAllUsers() {
-        User user = new User();
-        user.setFirstName("T");
-        user.setLastName("A");
-        user.setEmail("TA");
-        user.setPassword("12353");
-
-        ResponseEntity<List<Map<String, Object>>> response = restTemplate
-                .withBasicAuth(user.getEmail(),user.getPassword())
-                .getForEntity("/api/all", any());
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-    }
 
     @Test
     void shouldGetUserByEmail() throws Exception {

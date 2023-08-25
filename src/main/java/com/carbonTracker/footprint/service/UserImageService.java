@@ -4,6 +4,7 @@ import com.carbonTracker.footprint.dao.userImage.UserImageDao;
 import com.carbonTracker.footprint.model.userImage.UserImage;
 import com.carbonTracker.footprint.responses.exceptions.FileStorageException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;

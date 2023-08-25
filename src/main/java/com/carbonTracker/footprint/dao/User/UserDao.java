@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 public interface UserDao {
 
-    List<Map<String, Object>> findAllUsers();
     int addUser(User user);
     Optional<User> findUserById(int id);
     int deleteUser(int id);
