@@ -84,11 +84,11 @@ public class FootprintControllerTest {
 
         ResponseEntity<?> response = restTemplate
                 .postForEntity("/api/signup", user, Void.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         ResponseEntity<?> response2 = restTemplate
                 .postForEntity("/api/signup", user, Void.class);
-        assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
     @Test
     @DirtiesContext

@@ -29,17 +29,18 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody User user){
         if(!userDao.findUserEmail(user.getEmail()).isEmpty()){
-            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Email is already taken!", HttpStatus.OK);
         }
 
         userDao.createUser(user.getFirstName(), user.getLastName(), user.getEmail(), passwordEncoder.encode(user.getPassword()));
-        return new ResponseEntity<>("User Registered Successfully", HttpStatus.OK);
+        return new ResponseEntity<>("User Registered Successfully", HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")
     public ResponseEntity<String> authenicateUser(@RequestBody User user){
-        Authentication authentication = authenticationManger.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User sign-in successfully", HttpStatus.OK);
+
+            Authentication authentication = authenticationManger.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return new ResponseEntity<>("User sign-in successfully", HttpStatus.OK);
     }
 }
