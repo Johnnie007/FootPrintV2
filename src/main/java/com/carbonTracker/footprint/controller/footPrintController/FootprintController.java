@@ -91,6 +91,12 @@ public class FootprintController {
 
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<?> findById(Principal principal){
+        Optional<User> user = userDao.findUser(principal.getName());
+        return ResponseEntity.ok(user.orElseThrow(() -> new RuntimeException("user not found")));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUserById(@PathVariable("id") int id, Principal principal){
         Optional<User> user = userDao.findUserById(id);

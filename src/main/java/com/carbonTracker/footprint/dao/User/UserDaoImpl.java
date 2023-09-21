@@ -54,6 +54,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public Optional<User> findUser(String email){
+        String sql = """
+                SELECT *
+                FROM user
+                WHERE email = ?;
+                """;
+        return jdbcTemplate.query(sql, new UserRowMapper(), email)
+                .stream()
+                .findFirst();
+    }
+
+    @Override
     public Optional<Map<String, Object>> getEmail(String email){
         String sql = """
                 SELECT id, email, password
