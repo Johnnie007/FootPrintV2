@@ -71,8 +71,8 @@ public class FootprintController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<Optional<Map<String, Object>>> findEmail(@RequestBody User user){
-        return ResponseEntity.ok(userDao.getEmail(user.getEmail()));
+    public ResponseEntity<Optional<Map<String, Object>>> findEmail(Principal principal){
+        return ResponseEntity.ok(userDao.getEmail(principal.getName()));
     }
 
     @GetMapping("/{id}")
@@ -92,9 +92,9 @@ public class FootprintController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> findById(Principal principal){
-        Optional<User> user = userDao.findUser(principal.getName());
-        return ResponseEntity.ok(user.orElseThrow(() -> new RuntimeException("user not found")));
+    public ResponseEntity<?> findUser(Principal principal){
+        Map<String, Object> user = userDao.findUser(principal.getName());
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/{id}")

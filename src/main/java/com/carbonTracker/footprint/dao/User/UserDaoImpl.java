@@ -54,15 +54,15 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findUser(String email){
+    public Map<String, Object> findUser(String email){
         String sql = """
-                SELECT *
+                SELECT id, first_name, last_name, lifeStyle, footPrint
                 FROM user
                 WHERE email = ?;
                 """;
-        return jdbcTemplate.query(sql, new UserRowMapper(), email)
-                .stream()
-                .findFirst();
+        List<Map<String, Object>> test = jdbcTemplate.queryForList(sql, new Object[] {email});
+
+        return test.stream().findFirst().get();
     }
 
     @Override
