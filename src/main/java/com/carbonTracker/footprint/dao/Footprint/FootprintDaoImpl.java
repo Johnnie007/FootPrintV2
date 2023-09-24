@@ -34,4 +34,19 @@ public class FootprintDaoImpl implements FootprintDao {
                 """;
         return (List<Footprint>) jdbcTemplate.query(sql, new FootprintMapper(), id );
     }
+
+    public List<Footprint> userFootprint(String email){
+
+        String sql = """
+                 SElECT * FROM user u
+                    LEFT JOIN vehicle v
+                    ON u.id = v.userId
+                    LEFT JOIN home h
+                    ON h.userId = u.id
+                    LEFT JOIN offSetters o
+                    ON o.userId = u.id
+                    WHERE u.email = ?;
+                """;
+        return (List<Footprint>) jdbcTemplate.query(sql, new FootprintMapper(), email );
+    }
 }

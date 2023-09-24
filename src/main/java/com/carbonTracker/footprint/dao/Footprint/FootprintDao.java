@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface FootprintDao {
 
     List<Footprint> getUserFootprint(int id);
+    List<Footprint> userFootprint(String email);
 }

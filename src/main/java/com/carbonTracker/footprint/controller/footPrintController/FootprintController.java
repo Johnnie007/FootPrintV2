@@ -155,6 +155,12 @@ public class FootprintController {
             }
         }
     }
+
+    @GetMapping("/footprint")
+    public ResponseEntity<Optional<Footprint>> userFootPrint(Principal principal){
+        List <Footprint> footprint = footprintDao.userFootprint(principal.getName());
+        return ResponseEntity.ok(footprint.stream().findFirst());
+    }
     @PostMapping("{id}/add/vehicle")
     public ResponseEntity<Void> addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id, UriComponentsBuilder ucb, Principal principal){
         System.out.println(vehicle);
