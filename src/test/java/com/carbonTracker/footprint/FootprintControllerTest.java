@@ -220,6 +220,7 @@ public class FootprintControllerTest {
         Vehicle vehicle = new Vehicle();
         vehicle.setType("SUV");
         vehicle.setMpg("40.0");
+        vehicle.setVehicleGHG(1021);
         vehicle.setUserId(userId);
 
         ResultActions responseAddVehicle = mockMvc.perform(post("/api/{id}/add/vehicle", userId)
@@ -325,6 +326,7 @@ public class FootprintControllerTest {
         vehicle.setId(vehicleId);
         vehicle.setType("Sedan");
         vehicle.setMpg("25.0");
+        vehicle.setVehicleGHG(1021);
         vehicle.setUserId(userId);
 
         ResultActions responseDeleteVehicle = mockMvc.perform(delete("/api/{id}/delete/vehicle", userId)
@@ -358,6 +360,7 @@ public class FootprintControllerTest {
         Home home = new Home();
         home.setHomeSize(750);
         home.setHomeType("condo");
+        home.setHomeGHG(1021);
         home.setUserId(userId);
 
 
@@ -430,6 +433,7 @@ public class FootprintControllerTest {
         home.setId(homeId);
         home.setHomeSize(750);
         home.setHomeType("condo");
+        home.setHomeGHG(1021);
         home.setUserId(userId);
 
         ResultActions responseDeleteHome = mockMvc.perform(delete("/api/{id}/delete/home", userId)

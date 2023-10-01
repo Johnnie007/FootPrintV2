@@ -140,9 +140,10 @@ public class DaoTest {
         Home home = new Home();
         home.setUserId(1);
         home.setHomeSize(704);
+        home.setHomeGHG(102);
         home.setHomeType("Condo");
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(),  Mockito.anyInt())).thenReturn(1);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt(),  Mockito.anyInt())).thenReturn(1);
 
         int addHome = homeDao.addHome(home, 1);
 
@@ -183,9 +184,10 @@ public class DaoTest {
 
         vehicle.setMpg("32.4");
         vehicle.setType("SUV");
+        vehicle.setVehicleGHG(1021);
         vehicle.setUserId(1);
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt())).thenReturn(1);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
 
         int addVehicle = vehicleDao.addUserVehicle(vehicle,1);
 

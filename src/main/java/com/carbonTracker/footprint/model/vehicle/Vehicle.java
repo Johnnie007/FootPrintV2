@@ -2,6 +2,7 @@ package com.carbonTracker.footprint.model.vehicle;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class Vehicle {
 
@@ -14,7 +15,9 @@ public class Vehicle {
     @JsonProperty("mpg")
     String mpg;
 
-
+    @NotNull
+    @JsonProperty("vehicleGHG")
+    private int vehicleGHG;
     @JsonProperty("userId")
     int userId;
 
@@ -57,8 +60,17 @@ public class Vehicle {
                 "id=" + id +
                 ", make='" + type + '\'' +
                 ", mpg='" + mpg + '\'' +
+                ", vehicleGHG='" + vehicleGHG + '\'' +
                 ", userId=" + userId +
                 '}';
+    }
+
+    public int getVehicleGHG() {
+        return vehicleGHG;
+    }
+
+    public void setVehicleGHG(int vehicleGHG) {
+        this.vehicleGHG = vehicleGHG;
     }
 }
 

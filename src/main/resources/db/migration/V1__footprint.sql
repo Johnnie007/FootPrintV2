@@ -13,6 +13,7 @@ CREATE TABLE vehicle(
     id int auto_increment,
     type varChar(10),
     mpg varChar(5),
+    vehicleGHG int,
     userId int,
     primary key(id),
     FOREIGN Key (userId)
@@ -23,6 +24,7 @@ CREATE TABLE home(
     id int auto_increment,
     homeType varChar(10),
     homeSize int,
+    homeGHG int,
     userId int,
     primary key(id),
     FOREIGN Key (userId)

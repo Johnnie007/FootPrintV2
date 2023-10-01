@@ -65,6 +65,7 @@ public class FootprintMapper implements ResultSetExtractor {
                     home.setId(rs.getInt("h.id"));
                     home.setHomeType(rs.getNString("h.homeType"));
                     home.setHomeSize(rs.getInt("h.homeSize"));
+                    home.setHomeGHG(rs.getInt("h.homeGHG"));
                     home.setUserId(rs.getInt("h.userId"));
 
                     if(home.getId() != 0) {

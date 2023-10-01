@@ -163,7 +163,6 @@ public class FootprintController {
     }
     @PostMapping("{id}/add/vehicle")
     public ResponseEntity<Void> addVehicleByUserId(@Valid @RequestBody Vehicle vehicle, @PathVariable("id") int id, UriComponentsBuilder ucb, Principal principal){
-        System.out.println(vehicle);
 
         Optional<User> user = userDao.findUserById(id);
 
