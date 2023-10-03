@@ -23,15 +23,6 @@ public class UserDaoImpl implements UserDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
-    public int addUser(User user){
-        String sql = """
-                INSERT into user(first_name, last_name, email, footPrint, lifeStyle)
-                VALUES (?,?,?,?,?)
-                """;
-        return jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getFootPrint(), user.getLifeStyle());
-    }
-
     public int createUser(String firstName, String lastName, String email, String password){
         String sql = """
                 INSERT into user(first_name, last_name, email, password)

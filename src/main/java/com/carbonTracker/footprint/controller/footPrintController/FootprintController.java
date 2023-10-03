@@ -60,16 +60,6 @@ public class FootprintController {
         this.offSettersDao = offSettersDao;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Void> addUser(@Valid @RequestBody User user, UriComponentsBuilder ucb){
-        int savedUser = userDao.addUser(user);
-        URI locationOfUser = ucb
-                .path("api/add")
-                .buildAndExpand(savedUser)
-                .toUri();
-        return ResponseEntity.created(locationOfUser).build();
-    }
-
     @GetMapping("/email")
     public ResponseEntity<Optional<Map<String, Object>>> findEmail(Principal principal){
         return ResponseEntity.ok(userDao.getEmail(principal.getName()));

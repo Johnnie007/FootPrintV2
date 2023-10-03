@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 public interface UserDao {
 
-    int addUser(User user);
   Optional<User> findUserById(int id);
     Map<String, Object> findUser(String Email);
     int deleteUser(int id);
