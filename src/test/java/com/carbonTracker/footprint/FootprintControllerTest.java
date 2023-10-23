@@ -88,7 +88,7 @@ public class FootprintControllerTest {
 
         ResponseEntity<?> response2 = restTemplate
                 .postForEntity("/api/signup", user, Void.class);
-        assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.IM_USED);
     }
     @Test
     @DirtiesContext

@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody User user){
         if(!userDao.findUserEmail(user.getEmail()).isEmpty()){
-            return new ResponseEntity<>("Email is already taken!", HttpStatus.OK);
+            return new ResponseEntity<>("Email is already taken!", HttpStatus.IM_USED);
         }
 
         userDao.createUser(user.getFirstName(), user.getLastName(), user.getEmail(), passwordEncoder.encode(user.getPassword()));
@@ -38,8 +38,11 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<String> authenicateUser(@RequestBody User user){
+        if(userDao.findUserEmail(user.getEmail()).isEmpty()){
+            return new ResponseEntity<>("User not found", HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+        }
 
-            Authentication authentication = authenticationManger.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
+        Authentication authentication = authenticationManger.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return new ResponseEntity<>("User sign-in successfully", HttpStatus.OK);
     }
