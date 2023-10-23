@@ -140,10 +140,10 @@ public class DaoTest {
         Home home = new Home();
         home.setUserId(1);
         home.setHomeSize(704);
-        home.setHomeGHG(102);
+        home.setHomeGHG(102.4);
         home.setHomeType("Condo");
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt(),  Mockito.anyInt())).thenReturn(1);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyDouble(), Mockito.anyInt(),  Mockito.anyInt())).thenReturn(1);
 
         int addHome = homeDao.addHome(home, 1);
 
@@ -187,7 +187,7 @@ public class DaoTest {
         vehicle.setVehicleGHG(1021);
         vehicle.setUserId(1);
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyDouble(), Mockito.anyInt())).thenReturn(1);
 
         int addVehicle = vehicleDao.addUserVehicle(vehicle,1);
 
@@ -287,7 +287,7 @@ public class DaoTest {
         offSetters.setProduct("Succulent");
         offSetters.setType("Plant");
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),Mockito.anyDouble(), Mockito.anyInt())).thenReturn(1);
 
         int addOffsetter = offSettersDao.addOffSetter(offSetters,offSetters.getUserId());
 

@@ -13,7 +13,7 @@ CREATE TABLE vehicle(
     id int auto_increment,
     type varChar(10),
     mpg varChar(5),
-    vehicleGHG int,
+    vehicleGHG DECIMAL(10, 1),
     userId int,
     primary key(id),
     FOREIGN Key (userId)
@@ -24,7 +24,7 @@ CREATE TABLE home(
     id int auto_increment,
     homeType varChar(10),
     homeSize int,
-    homeGHG int,
+    homeGHG DECIMAL(10, 1),
     userId int,
     primary key(id),
     FOREIGN Key (userId)
@@ -36,7 +36,7 @@ CREATE TABLE recommendationList(
     type varChar(15),
     product varChar(30),
     productLocation varChar(30),
-    CCS integer,
+    CCS DECIMAL(10, 1),
     primary key(id)
 );
 
@@ -44,7 +44,7 @@ CREATE TABLE offSetters(
     id int auto_increment,
     type varChar(15),
     product varChar(30),
-    CCS int,
+    CCS DECIMAL(10, 1),
     userId int,
     primary key(id),
     FOREIGN Key (userId)

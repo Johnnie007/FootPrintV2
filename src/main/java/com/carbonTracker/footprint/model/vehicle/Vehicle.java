@@ -17,7 +17,7 @@ public class Vehicle {
 
     @NotNull
     @JsonProperty("vehicleGHG")
-    private int vehicleGHG;
+    private double vehicleGHG;
     @JsonProperty("userId")
     int userId;
 
@@ -54,6 +54,14 @@ public class Vehicle {
        return this.userId = userId;
     }
 
+    public double getVehicleGHG() {
+        return vehicleGHG;
+    }
+
+    public void setVehicleGHG(double vehicleGHG) {
+        this.vehicleGHG = vehicleGHG;
+    }
+
     @Override
     public String toString() {
         return "Vehicle{" +
@@ -65,12 +73,6 @@ public class Vehicle {
                 '}';
     }
 
-    public int getVehicleGHG() {
-        return vehicleGHG;
-    }
 
-    public void setVehicleGHG(int vehicleGHG) {
-        this.vehicleGHG = vehicleGHG;
-    }
 }
 

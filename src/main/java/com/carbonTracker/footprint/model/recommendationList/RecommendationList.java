@@ -23,7 +23,7 @@ public class RecommendationList {
 
     @NotBlank
     @JsonProperty("CCS")
-    private int CCS;
+    private double CCS;
 
     public int getId() {
         return id;
@@ -41,7 +41,7 @@ public class RecommendationList {
         return productLocation;
     }
 
-    public int getCCS() { return CCS;}
+    public double getCCS() { return CCS;}
 
     public void setId(int id) {
         this.id = id;
@@ -59,5 +59,5 @@ public class RecommendationList {
         this.productLocation = productLocation;
     }
 
-    public void setCCS(int CCS){this.CCS = CCS;}
+    public void setCCS(double CCS){this.CCS = CCS;}
 }

@@ -19,7 +19,7 @@ public class Home {
 
     @NotNull
     @JsonProperty("homeGHG")
-    private int homeGHG;
+    private double homeGHG;
 
     @NotNull
     @JsonProperty("userId")
@@ -37,7 +37,7 @@ public class Home {
     public String getHomeType(){
         return homeType;
     }
-    public int getHomeGHG(){return  homeGHG;}
+    public double getHomeGHG(){return homeGHG;}
 
     public int getUserId(){
         return userId;
@@ -47,7 +47,7 @@ public class Home {
         this.homeSize = homeSize;
     }
 
-    public void setHomeGHG(int homeGHG) {this.homeGHG = homeGHG;}
+    public void setHomeGHG(double homeGHG) {this.homeGHG = homeGHG;}
     public void setHomeType(String homeType) {
         this.homeType = homeType;
     }

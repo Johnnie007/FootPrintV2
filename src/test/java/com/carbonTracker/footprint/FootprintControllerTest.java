@@ -509,7 +509,7 @@ public class FootprintControllerTest {
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$[0].type", is("Plant")))
                 .andExpect(jsonPath("$[0].product", is("Succulent")))
-                .andExpect(jsonPath("$[0].CCS", is(5)))
+                .andExpect(jsonPath("$[0].CCS", is(5.0)))
                 .andExpect(jsonPath("$[0].userId", is(userId)));
 
     }

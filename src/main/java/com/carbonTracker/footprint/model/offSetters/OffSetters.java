@@ -20,7 +20,7 @@ public class OffSetters {
 
     @NotNull
     @JsonProperty("CCS")
-    private int CCS;
+    private double CCS;
 
     @NotNull
     @JsonProperty("userId")
@@ -36,7 +36,7 @@ public class OffSetters {
         return product;
     }
 
-    public int getCCS(){
+    public double getCCS(){
         return CCS;
     }
 
@@ -54,7 +54,7 @@ public class OffSetters {
         this.product = product;
     }
 
-    public void setCCS(int CCS){
+    public void setCCS(double CCS){
         this.CCS = CCS;
     }
 
