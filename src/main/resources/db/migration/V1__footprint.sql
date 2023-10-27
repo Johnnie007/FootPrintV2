@@ -11,6 +11,7 @@ CREATE table user(
 
 CREATE TABLE vehicle(
     id int auto_increment,
+    month_added varChar(10),
     type varChar(10),
     mpg varChar(5),
     vehicleGHG DECIMAL(10, 1),
@@ -22,6 +23,7 @@ CREATE TABLE vehicle(
 
 CREATE TABLE home(
     id int auto_increment,
+    month_added varChar(10),
     homeType varChar(10),
     homeSize int,
     homeGHG DECIMAL(10, 1),

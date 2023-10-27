@@ -10,6 +10,10 @@ public class Home {
     private int id;
 
     @NotBlank
+    @JsonProperty("month_added")
+    private String month;
+
+    @NotBlank
     @JsonProperty("homeType")
     private String homeType;
 
@@ -58,5 +62,13 @@ public class Home {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
     }
 }

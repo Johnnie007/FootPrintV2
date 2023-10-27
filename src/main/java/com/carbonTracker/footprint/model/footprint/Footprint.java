@@ -11,7 +11,6 @@ public class Footprint {
     User user;
     List <Vehicle> vehicles;
     List <Home> homes;
-
     List <OffSetters> offSetters;
 
 

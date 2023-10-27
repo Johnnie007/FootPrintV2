@@ -12,6 +12,7 @@ public class VehicleRowMapper implements RowMapper <Vehicle> {
     public Vehicle mapRow(ResultSet rs, int rowNum) throws SQLException {
         Vehicle vehicle = new Vehicle();
                 vehicle.setId(rs.getInt("id"));
+                vehicle.setType(rs.getString("month_added"));
                 vehicle.setType(rs.getString("type"));
                 vehicle.setMpg(rs.getString("mpg"));
                 vehicle.setVehicleGHG(rs.getInt("vehicleGHG"));

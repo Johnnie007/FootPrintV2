@@ -355,6 +355,9 @@ public class FootprintController {
         Optional<UserImage> image = userImageService.getImage(id);
         Optional<User> user = userDao.findUserById(id);
 
+        System.out.println(file);
+        System.out.println(0);
+
         if(user.isPresent()) {
             String authEmail = principal.getName();
             String userEmail = user.get().getEmail();

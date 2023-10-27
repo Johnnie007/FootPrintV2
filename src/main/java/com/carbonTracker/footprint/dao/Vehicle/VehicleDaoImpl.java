@@ -23,10 +23,10 @@ public class VehicleDaoImpl implements VehicleDao{
     @Override
     public int addUserVehicle(Vehicle vehicle, int id){
         String sql = """
-                INSERT into vehicle(type, mpg, vehicleGHG, userId)
-                VALUES(?,?,?,?)
+                INSERT into vehicle( month_added, type, mpg, vehicleGHG, userId)
+                VALUES(?,?,?,?,?)
                 """;
-        return jdbcTemplate.update(sql, vehicle.getType(), vehicle.getMpg(), vehicle.getVehicleGHG(), id);
+        return jdbcTemplate.update(sql, vehicle.getMonth(), vehicle.getType(), vehicle.getMpg(), vehicle.getVehicleGHG(), id);
     }
 
     @Override
