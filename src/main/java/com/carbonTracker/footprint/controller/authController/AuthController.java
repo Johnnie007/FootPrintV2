@@ -32,7 +32,7 @@ public class AuthController {
             return new ResponseEntity<>("Email is already taken!", HttpStatus.IM_USED);
         }
 
-        userDao.createUser(user.getFirstName(), user.getLastName(), user.getEmail(), passwordEncoder.encode(user.getPassword()));
+        userDao.createUser(user.getFirstName(), user.getLastName(), user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getMonth_joined());
         return new ResponseEntity<>("User Registered Successfully", HttpStatus.CREATED);
     }
 

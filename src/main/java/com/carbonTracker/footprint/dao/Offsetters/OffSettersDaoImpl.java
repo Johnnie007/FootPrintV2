@@ -31,10 +31,10 @@ public class OffSettersDaoImpl implements OffSettersDao {
     @Override
     public int addOffSetter(OffSetters offsetters, int id){
         String sql = """
-                INSERT into offSetters( type, product, CCS, userId)
-                VALUES (?, ?, ?, ?)
+                INSERT into offSetters( month_added, type, product, CCS, userId)
+                VALUES (?, ?, ?, ?, ?)
                 """;
-        return jdbcTemplate.update(sql, offsetters.getType(), offsetters.getProduct(), offsetters.getCCS(), id);
+        return jdbcTemplate.update(sql,offsetters.getMonth_added(), offsetters.getType(), offsetters.getProduct(), offsetters.getCCS(), id);
     }
 
     @Override

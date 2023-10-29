@@ -1,5 +1,6 @@
 CREATE table user(
     id int auto_increment,
+    month_joined varChar (10),
     first_name varChar(30),
     last_name varChar(30),
     email varChar(20) UNIQUE,
@@ -44,6 +45,7 @@ CREATE TABLE recommendationList(
 
 CREATE TABLE offSetters(
     id int auto_increment,
+     month_added varChar(10),
     type varChar(15),
     product varChar(30),
     CCS DECIMAL(10, 1),

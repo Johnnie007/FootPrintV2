@@ -23,13 +23,13 @@ public class UserDaoImpl implements UserDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public int createUser(String firstName, String lastName, String email, String password){
+    public int createUser(String firstName, String lastName, String email, String password,String month_joined){
         String sql = """
-                INSERT into user(first_name, last_name, email, password)
-                VALUES (?,?,?,?)
+                INSERT into user(first_name, last_name, email, password, month_joined)
+                VALUES (?,?,?,?,?)
                 """;
 
-        return jdbcTemplate.update(sql, firstName, lastName, email, password);
+        return jdbcTemplate.update(sql, firstName, lastName, email, password, month_joined);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Map<String, Object> findUser(String email){
         String sql = """
-                SELECT id, first_name, last_name, lifeStyle, footPrint
+                SELECT id, month_joined, first_name, last_name, lifeStyle, footPrint
                 FROM user
                 WHERE email = ?;
                 """;

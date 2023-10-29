@@ -14,6 +14,9 @@ public class User {
     private int id;
 
     @NotBlank
+    @JsonProperty("month_joined")
+    private String month_joined;
+    @NotBlank
     @JsonProperty("firstName")
     private String firstName;
 
@@ -93,7 +96,13 @@ public class User {
         this.lifeStyle = lifeStyle;
     }
 
+    public String getMonth_joined() {
+        return month_joined;
+    }
 
+    public void setMonth_joined(String month_joined) {
+        this.month_joined = month_joined;
+    }
 
     @Override
     public String toString(){

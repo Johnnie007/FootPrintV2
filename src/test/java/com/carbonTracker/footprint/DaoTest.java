@@ -67,20 +67,21 @@ public class DaoTest {
     @Test
     public void createUserDaoTest(){
          String  sql = """
-                INSERT into user(first_name, last_name, email, password)
-                VALUES (?,?,?,?)
+                INSERT into user(first_name, last_name, email, password, month_joined)
+                VALUES (?,?,?,?,?)
                 """;
         User user = new User();
+        user.setMonth_joined("Jan");
         user.setFirstName("Test");
         user.setLastName("Testing");
         user.setEmail("Testing@test.com");
         user.setPassword("123");
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(1);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(1);
 
-        int userCreated = userDao.createUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword());
+        int userCreated = userDao.createUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), user.getMonth_joined());
 
-        Assertions.assertEquals(1,jdbcTemplate.update(sql, user.getFirstName() ,user.getLastName(), user.getEmail(), user.getPassword()));
+        Assertions.assertEquals(1,jdbcTemplate.update(sql, user.getFirstName() ,user.getLastName(), user.getEmail(), user.getPassword(), user.getMonth_joined()));
         Assertions.assertEquals(1, userCreated);
 
     }
@@ -266,6 +267,7 @@ public class DaoTest {
     public void getOffsetters(){
         OffSetters offSetters = new OffSetters();
         offSetters.setUserId(1);
+        offSetters.setMonth_added("Jan");
         offSetters.setCCS(200);
         offSetters.setProduct("Succulent");
         offSetters.setType("Plant");
@@ -284,11 +286,12 @@ public class DaoTest {
     public void addOffsetter(){
         OffSetters offSetters = new OffSetters();
         offSetters.setUserId(1);
+        offSetters.setMonth_added("Jan");
         offSetters.setCCS(200);
         offSetters.setProduct("Succulent");
         offSetters.setType("Plant");
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),Mockito.anyDouble(), Mockito.anyInt())).thenReturn(1);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),Mockito.anyDouble(), Mockito.anyInt())).thenReturn(1);
 
         int addOffsetter = offSettersDao.addOffSetter(offSetters,offSetters.getUserId());
 

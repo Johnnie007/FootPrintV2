@@ -13,7 +13,7 @@ public interface UserDao {
 
     Optional<User> findUserEmail(String email);
 
-    int createUser(String firstName, String lastName, String email, String password);
+    int createUser(String firstName, String lastName, String email, String password, String month_joined);
 
     Optional<Map<String, Object>> getEmail(String email);
 

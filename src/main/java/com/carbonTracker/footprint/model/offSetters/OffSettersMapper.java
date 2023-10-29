@@ -11,6 +11,7 @@ public class OffSettersMapper implements RowMapper<OffSetters> {
     public OffSetters mapRow(ResultSet rs, int rowNum) throws SQLException {
         OffSetters offSetters = new OffSetters();
                 offSetters.setId(rs.getInt("id"));
+                offSetters.setMonth_added(rs.getNString("month_added"));
                 offSetters.setType(rs.getNString("type"));
                 offSetters.setProduct(rs.getNString("product"));
                 offSetters.setCCS(rs.getInt("CCS"));

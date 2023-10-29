@@ -81,6 +81,7 @@ public class FootprintControllerTest {
         User user = new User();
         user.setEmail("TA");
         user.setPassword("12353");
+        user.setMonth_joined("Jan");
 
         ResponseEntity<?> response = restTemplate
                 .postForEntity("/api/signup", user, Void.class);
@@ -99,6 +100,7 @@ public class FootprintControllerTest {
         user.setPassword("12353");
 
         User user2 = new User();
+        user.setMonth_joined("Jan");
         user2.setFirstName("T");
         user2.setLastName("A");
         user2.setEmail("TA");
@@ -145,6 +147,7 @@ public class FootprintControllerTest {
     void shouldUpdateUser() throws Exception{
 
         User user = new User();
+        user.setMonth_joined("Jan");
         user.setFirstName("T");
         user.setLastName("A");
         user.setEmail("TA");
@@ -172,6 +175,7 @@ public class FootprintControllerTest {
     @Test
     void shouldGetUserById() throws Exception{
         User user = new User();
+        user.setMonth_joined("Jan");
         user.setFirstName("T");
         user.setLastName("A");
         user.setEmail("TA");
@@ -470,6 +474,7 @@ public class FootprintControllerTest {
         Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
 
         OffSetters offSetters = new OffSetters();
+        offSetters.setMonth_added("Jan");
         offSetters.setType("Plant");
         offSetters.setCCS(5);
         offSetters.setProduct("Succulent");
@@ -547,6 +552,7 @@ public class FootprintControllerTest {
 
         OffSetters offSetters = new OffSetters();
         offSetters.setId(offSetterId);
+        offSetters.setMonth_added("Jan");
         offSetters.setType("type");
         offSetters.setCCS(5);
         offSetters.setProduct("Succulent");
