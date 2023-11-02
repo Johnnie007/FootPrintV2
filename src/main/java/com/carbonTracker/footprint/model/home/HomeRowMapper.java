@@ -10,7 +10,6 @@ public class HomeRowMapper implements RowMapper<Home>{
     public Home mapRow(ResultSet rs, int rowNum) throws SQLException {
         Home home = new Home();
         home.setId(rs.getInt("id"));
-        home.setMonth("month_added");
         home.setHomeType(rs.getNString("homeType"));
         home.setHomeGHG(rs.getInt("homeGHG"));
         home.setHomeSize(rs.getInt("homeSize"));

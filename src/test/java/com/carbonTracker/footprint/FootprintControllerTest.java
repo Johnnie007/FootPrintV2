@@ -222,7 +222,6 @@ public class FootprintControllerTest {
         Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
 
         Vehicle vehicle = new Vehicle();
-        vehicle.setMonth("Jan");
         vehicle.setType("SUV");
         vehicle.setMpg("40.0");
         vehicle.setVehicleGHG(1021);
@@ -257,7 +256,6 @@ public class FootprintControllerTest {
         Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
 
         Vehicle vehicle = new Vehicle();
-        vehicle.setMonth("Jan");
         vehicle.setType("Sedan");
         vehicle.setMpg("25.0");
         vehicle.setUserId(userId);
@@ -330,7 +328,6 @@ public class FootprintControllerTest {
 
         Vehicle vehicle = new Vehicle();
         vehicle.setId(vehicleId);
-        vehicle.setMonth("Jan");
         vehicle.setType("Sedan");
         vehicle.setMpg("25.0");
         vehicle.setVehicleGHG(1021);
@@ -365,7 +362,6 @@ public class FootprintControllerTest {
         Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
 
         Home home = new Home();
-        home.setMonth("Jan");
         home.setHomeSize(750);
         home.setHomeType("condo");
         home.setHomeGHG(1021);
@@ -439,7 +435,6 @@ public class FootprintControllerTest {
 
         Home home = new Home();
         home.setId(homeId);
-        home.setMonth("Jan");
         home.setHomeSize(750);
         home.setHomeType("condo");
         home.setHomeGHG(1021);

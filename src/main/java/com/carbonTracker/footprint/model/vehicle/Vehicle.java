@@ -8,10 +8,6 @@ public class Vehicle {
 
     @JsonProperty("id")
     int id;
-
-    @NotBlank
-    @JsonProperty("month_added")
-    private String month;
     @NotBlank
     @JsonProperty("type")
     String type;
@@ -64,14 +60,6 @@ public class Vehicle {
 
     public void setVehicleGHG(double vehicleGHG) {
         this.vehicleGHG = vehicleGHG;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
     }
 
     @Override

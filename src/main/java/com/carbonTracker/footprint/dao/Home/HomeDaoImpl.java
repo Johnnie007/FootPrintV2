@@ -30,10 +30,10 @@ public class HomeDaoImpl implements HomeDao{
     @Override
     public int addHome(Home home, int userId){
         String sql = """
-                INSERT into home(month_added, homeType, homeGHG, homeSize, userId)
-                VALUES(?,?,?,?,?)
+                INSERT into home(homeType, homeGHG, homeSize, userId)
+                VALUES(?,?,?,?)
                 """;
-        return jdbcTemplate.update(sql, home.getMonth(), home.getHomeType(), home.getHomeGHG(), home.getHomeSize(), userId);
+        return jdbcTemplate.update(sql, home.getHomeType(), home.getHomeGHG(), home.getHomeSize(), userId);
     }
 
     @Override

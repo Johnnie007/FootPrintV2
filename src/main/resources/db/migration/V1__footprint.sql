@@ -12,7 +12,6 @@ CREATE table user(
 
 CREATE TABLE vehicle(
     id int auto_increment,
-    month_added varChar(10),
     type varChar(10),
     mpg varChar(5),
     vehicleGHG DECIMAL(10, 1),
@@ -24,7 +23,6 @@ CREATE TABLE vehicle(
 
 CREATE TABLE home(
     id int auto_increment,
-    month_added varChar(10),
     homeType varChar(10),
     homeSize int,
     homeGHG DECIMAL(10, 1),
@@ -60,6 +58,17 @@ CREATE TABLE profileImage(
     type varChar(15),
     imageName varChar(30),
     imageData LONGBLOB,
+    userId int,
+    primary key(id),
+    FOREIGN Key (userId)
+        REFERENCES user(id)
+);
+
+CREATE TABLE GHGStorage(
+    id int auto_increment,
+    vehicleTotal DECIMAL(10, 1),
+    homeTotal DECIMAL(10, 1),
+    storageMonth varChar(10),
     userId int,
     primary key(id),
     FOREIGN Key (userId)
