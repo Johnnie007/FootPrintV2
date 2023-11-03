@@ -1,10 +1,12 @@
 package com.carbonTracker.footprint.controller.footPrintController;
 import com.carbonTracker.footprint.dao.Footprint.FootprintDao;
+import com.carbonTracker.footprint.dao.GHGStorage.GHGStorageDao;
 import com.carbonTracker.footprint.dao.Home.HomeDao;
 import com.carbonTracker.footprint.dao.Offsetters.OffSettersDao;
 import com.carbonTracker.footprint.dao.RecommendationList.RecommendationListDao;
 import com.carbonTracker.footprint.dao.User.UserDao;
 import com.carbonTracker.footprint.dao.Vehicle.VehicleDao;
+import com.carbonTracker.footprint.model.GHGStorage.GHGStorage;
 import com.carbonTracker.footprint.model.footprint.Footprint;
 import com.carbonTracker.footprint.model.home.Home;
 import com.carbonTracker.footprint.model.offSetters.OffSetters;
@@ -43,6 +45,7 @@ public class FootprintController {
     private final FootprintDao footprintDao;
     private final RecommendationListDao recommendationListDao;
     private final OffSettersDao offSettersDao;
+    private final GHGStorageDao ghgStorageDao;
 
     @Autowired
     private UserImageService userImageService;
@@ -51,13 +54,14 @@ public class FootprintController {
 
     //User Endpoints
     @Autowired
-    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao){
+    public FootprintController(UserDao userDao, VehicleDao vehicleDao, HomeDao homeDao, FootprintDao footprintDao, RecommendationListDao recommendationListDao, OffSettersDao offSettersDao, GHGStorageDao ghgStorageDao){
         this.userDao = userDao;
         this.vehicleDao = vehicleDao;
         this.homeDao = homeDao;
         this.footprintDao = footprintDao;
         this.recommendationListDao = recommendationListDao;
         this.offSettersDao = offSettersDao;
+        this.ghgStorageDao = ghgStorageDao;
     }
 
     @GetMapping("/email")
@@ -355,9 +359,6 @@ public class FootprintController {
         Optional<UserImage> image = userImageService.getImage(id);
         Optional<User> user = userDao.findUserById(id);
 
-        System.out.println(file);
-        System.out.println(0);
-
         if(user.isPresent()) {
             String authEmail = principal.getName();
             String userEmail = user.get().getEmail();
@@ -424,6 +425,68 @@ public class FootprintController {
         else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("{userId}/storage")
+    public ResponseEntity <List<GHGStorage>> getStorage(@PathVariable("userId") int userId, Principal principal){
+        Optional<User> user = userDao.findUserById(userId);
+
+        if(user.isPresent()){
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if(!authEmail.equals(userEmail)){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }else {
+                return ResponseEntity.ok(ghgStorageDao.getStorage(userId));
+            }
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("{userId}/storage")
+    public ResponseEntity<Void> addStorage(@Valid @RequestBody GHGStorage ghgStorage, @PathVariable("userId") int userId, UriComponentsBuilder ucb, Principal principal){
+
+        Optional<User> user = userDao.findUserById(userId);
+
+        if(user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+            if(!authEmail.equals(userEmail)){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }else {
+
+                int savedUserVehicle = ghgStorageDao.addStorage(ghgStorage, userId);
+                URI locationOfVehicle = ucb
+                        .path("api/{userId}/storage")
+                        .buildAndExpand(savedUserVehicle)
+                        .toUri();
+                return ResponseEntity.created(locationOfVehicle).build();
+            }
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("{userId}/storage")
+    public ResponseEntity<Void> updateStorage(@Valid @RequestBody GHGStorage ghgStorage, @PathVariable("userId") int userId, Principal principal){
+        Optional<User> user = userDao.findUserById(userId);
+        if(user.isPresent()){
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+
+            if(!authEmail.equals(userEmail)){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                ghgStorageDao.updateStorage(ghgStorage,userId);
+                return ResponseEntity.noContent().build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
 }

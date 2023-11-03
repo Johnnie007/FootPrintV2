@@ -11,7 +11,7 @@ public class HomeRowMapper implements RowMapper<Home>{
         Home home = new Home();
         home.setId(rs.getInt("id"));
         home.setHomeType(rs.getNString("homeType"));
-        home.setHomeGHG(rs.getInt("homeGHG"));
+        home.setHomeGHG(rs.getDouble("homeGHG"));
         home.setHomeSize(rs.getInt("homeSize"));
         home.setUserId(rs.getInt("userId"));
         return home;

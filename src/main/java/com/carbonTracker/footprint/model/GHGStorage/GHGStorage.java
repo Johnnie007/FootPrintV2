@@ -1,20 +1,30 @@
+package com.carbonTracker.footprint.model.GHGStorage;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class GHGStorage {
 
     @JsonProperty("id")
     private int id;
 
-    @NotBlank
+    @NotNull
     @JsonProperty("vehicleTotal")
     private double vehicleTotal;
 
-    @NotBlank
+    @NotNull
     @JsonProperty("homeTotal")
     private double homeTotal;
 
     @NotBlank
     @JsonProperty("storageMonth")
     private String storageMonth;
+
+
+    @NotNull
+    @JsonProperty("userId")
+    private int userId;
 
     public int getId() {
         return id;
@@ -46,6 +56,14 @@ public class GHGStorage {
 
     public void setStorageMonth(String storageMonth) {
         this.storageMonth = storageMonth;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
 }
