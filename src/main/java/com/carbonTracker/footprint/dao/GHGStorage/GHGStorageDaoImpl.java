@@ -4,9 +4,11 @@ import com.carbonTracker.footprint.model.GHGStorage.GHGStorage;
 import com.carbonTracker.footprint.model.GHGStorage.GHGStorageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class GHGStorageDaoImpl implements GHGStorageDao{
 
     public final JdbcTemplate jdbcTemplate;
@@ -16,7 +18,7 @@ public class GHGStorageDaoImpl implements GHGStorageDao{
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Autowired
+    @Override
     public List<GHGStorage> getStorage(int userId){
         String sql = """
                 SELECT id, vehicleTotal, homeTotal, storageMonth, userId
@@ -27,7 +29,7 @@ public class GHGStorageDaoImpl implements GHGStorageDao{
         return jdbcTemplate.query(sql, new GHGStorageMapper(), userId);
     }
 
-    @Autowired
+    @Override
     public int addStorage(GHGStorage ghgStorage, int userId){
         String sql = """
                 INSERT into GHGStorage(vehicleTotal, homeTotal, storageMonth, userId)
@@ -36,7 +38,7 @@ public class GHGStorageDaoImpl implements GHGStorageDao{
         return jdbcTemplate.update(sql, ghgStorage.getVehicleTotal(), ghgStorage.getHomeTotal(), ghgStorage.getStorageMonth(),userId);
     }
 
-    @Autowired
+    @Override
     public int updateStorage(GHGStorage ghgStorage, int userId){
         String sql = """
                 UPDATE GHGStorage
