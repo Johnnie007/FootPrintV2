@@ -470,19 +470,14 @@ public class FootprintController {
         }
     }
 
-    @PutMapping("{userId}/storage")
-    public ResponseEntity<Void> updateStorage(@Valid @RequestBody GHGStorage ghgStorage, @PathVariable("userId") int userId, Principal principal){
-        Optional<User> user = userDao.findUserById(userId);
+    @PutMapping("storage")
+    public ResponseEntity<Void> updateStorage(@Valid @RequestBody GHGStorage ghgStorage, Principal principal){
+        Optional<User> user = userDao.findUserEmail(principal.getName());
         if(user.isPresent()){
             String authEmail = principal.getName();
-            String userEmail = user.get().getEmail();
-
-            if(!authEmail.equals(userEmail)){
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            } else {
-                ghgStorageDao.updateStorage(ghgStorage,userId);
+            System.out.println(user.get());
+                ghgStorageDao.updateStorage(ghgStorage, user.get().getId());
                 return ResponseEntity.noContent().build();
-            }
         } else {
             return ResponseEntity.notFound().build();
         }

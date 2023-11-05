@@ -45,6 +45,6 @@ public class GHGStorageDaoImpl implements GHGStorageDao{
                 SET vehicleTotal = ?, homeTotal = ?
                 WHERE userId = ?
                 """;
-        return jdbcTemplate.update(sql, ghgStorage.getVehicleTotal(), ghgStorage.getHomeTotal());
+        return jdbcTemplate.update(sql, ghgStorage.getVehicleTotal(), ghgStorage.getHomeTotal(), userId);
     }
 }

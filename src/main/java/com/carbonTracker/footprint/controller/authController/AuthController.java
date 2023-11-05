@@ -33,7 +33,8 @@ public class AuthController {
         }
 
         userDao.createUser(user.getFirstName(), user.getLastName(), user.getEmail(), passwordEncoder.encode(user.getPassword()), user.getMonth_joined());
-        return new ResponseEntity<>("User Registered Successfully", HttpStatus.CREATED);
+        return ResponseEntity.ok(userDao.findUserEmail(user.getEmail()));
+        //return new ResponseEntity<>("User Registered Successfully", HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")
