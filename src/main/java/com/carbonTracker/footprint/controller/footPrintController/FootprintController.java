@@ -450,7 +450,6 @@ public class FootprintController {
     public ResponseEntity<Void> addStorage(@Valid @RequestBody GHGStorage ghgStorage, @PathVariable("userId") int userId, UriComponentsBuilder ucb, Principal principal){
 
         Optional<User> user = userDao.findUserById(userId);
-
         if(user.isPresent()) {
             String authEmail = principal.getName();
             String userEmail = user.get().getEmail();
