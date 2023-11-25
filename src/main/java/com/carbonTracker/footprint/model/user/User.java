@@ -38,7 +38,7 @@ public class User {
 
 
     @JsonProperty("footPrint")
-    private int footPrint;
+    private int footprint;
 
     public int getId(){
         return id;
@@ -81,11 +81,11 @@ public class User {
     }
 
     public int  getFootPrint() {
-        return footPrint;
+        return footprint;
     }
 
     public void setFootPrint(int footPrint) {
-        this.footPrint = footPrint;
+        this.footprint = footPrint;
     }
 
     public String getLifeStyle() {
@@ -111,7 +111,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", lifestyle='" + lifeStyle + '\'' +
-                ", footPrint='" + footPrint + '\'' +
+                ", footprint='" + footprint + '\'' +
                 '}';
     }
 }

@@ -17,7 +17,7 @@ public class UserRowMapper implements RowMapper<User> {
                 user.setEmail(rs.getNString("email"));
                 user.setPassword(rs.getNString("password"));
                 user.setLifeStyle(rs.getNString("lifeStyle"));
-                user.setFootPrint(rs.getInt("footPrint"));
+                user.setFootPrint(rs.getInt("footprint"));
         return user;
     }
 }

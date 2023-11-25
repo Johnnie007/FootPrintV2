@@ -9,7 +9,7 @@ public interface UserDao {
   Optional<User> findUserById(int id);
     Map<String, Object> findUser(String Email);
     int deleteUser(int id);
-    int updateUser(int id, User user);
+    int updateUser(int id, int footprint);
 
     Optional<User> findUserEmail(String email);
 

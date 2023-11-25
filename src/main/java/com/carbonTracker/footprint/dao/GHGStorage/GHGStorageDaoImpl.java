@@ -43,8 +43,17 @@ public class GHGStorageDaoImpl implements GHGStorageDao{
         String sql = """
                 UPDATE GHGStorage
                 SET vehicleTotal = ?, homeTotal = ?
-                WHERE userId = ?
+                WHERE userId = ? AND id = ?
                 """;
-        return jdbcTemplate.update(sql, ghgStorage.getVehicleTotal(), ghgStorage.getHomeTotal(), userId);
+        return jdbcTemplate.update(sql, ghgStorage.getVehicleTotal(), ghgStorage.getHomeTotal(), userId, ghgStorage.getId());
+    }
+
+    @Override
+    public int deleteStorage(int userId){
+        String sql = """
+                DELETE FROM GHGStorage
+                WHERE userID = ?
+                """;
+        return jdbcTemplate.update(sql, userId);
     }
 }

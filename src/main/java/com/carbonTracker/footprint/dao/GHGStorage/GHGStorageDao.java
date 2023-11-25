@@ -9,4 +9,6 @@ public interface GHGStorageDao {
     List<GHGStorage> getStorage(int userId);
     int addStorage(GHGStorage ghgStorage, int userId);
     int updateStorage(GHGStorage ghgStorage, int userId);
+
+    int deleteStorage(int userId);
 }

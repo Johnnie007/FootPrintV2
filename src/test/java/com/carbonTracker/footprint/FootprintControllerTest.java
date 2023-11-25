@@ -81,11 +81,14 @@ public class FootprintControllerTest {
         User user = new User();
         user.setEmail("TA");
         user.setPassword("12353");
+        user.setFirstName("T");
+        user.setLastName("A");
+        user.setEmail("TA");
         user.setMonth_joined("Jan");
 
         ResponseEntity<?> response = restTemplate
                 .postForEntity("/api/signup", user, Void.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         ResponseEntity<?> response2 = restTemplate
                 .postForEntity("/api/signup", user, Void.class);
@@ -152,6 +155,7 @@ public class FootprintControllerTest {
         user.setLastName("A");
         user.setEmail("TA");
         user.setPassword("12353");
+        user.setFootPrint(23);
 
         ResultActions responseGetUserByEmail= mockMvc.perform(get("/api/email")
                 .with(user(user.getEmail()).password(user.getPassword()))
@@ -161,7 +165,7 @@ public class FootprintControllerTest {
 
         Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
 
-        ResultActions responseUpdateUser= mockMvc.perform(put("/api/update/{id}", userId)
+        ResultActions responseUpdateUser= mockMvc.perform(post("/api/update/{id}", userId)
                 .with(user(user.getEmail()).password(user.getPassword()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(user))

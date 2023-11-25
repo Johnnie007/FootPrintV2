@@ -47,7 +47,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Map<String, Object> findUser(String email){
         String sql = """
-                SELECT id, month_joined, first_name, last_name, lifeStyle, footPrint
+                SELECT id, month_joined, first_name, last_name, lifeStyle, footprint
                 FROM user
                 WHERE email = ?;
                 """;
@@ -69,14 +69,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int updateUser(int id, User user ){
+    public int updateUser(int id, int footprint ){
         String sql = """
                 UPDATE user
-                SET first_name = ?, last_name = ?, email = ?, footPrint = ?, lifeStyle = ?
+                SET footprint = ?
                 WHERE id = ?;
                 """;
 
-        return jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getFootPrint(), user.getLifeStyle(),id);
+        return jdbcTemplate.update(sql, footprint,id);
     }
 
     @Override

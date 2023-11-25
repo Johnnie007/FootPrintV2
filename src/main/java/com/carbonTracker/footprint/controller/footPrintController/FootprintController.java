@@ -109,8 +109,8 @@ public class FootprintController {
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateUser(@Valid @RequestBody User user, @PathVariable("id") int id, Principal principal){
+    @PostMapping("/update/{id}")
+    public ResponseEntity<String> updateUser(@RequestBody User user, @PathVariable("id") int id, Principal principal){
 
         Optional<User> findUser = userDao.findUserById(id);
 
@@ -122,7 +122,7 @@ public class FootprintController {
             String userEmail = user.getEmail();
 
             if(userEmail.equals(authEmail)){
-                userDao.updateUser(id, user);
+                userDao.updateUser(id, user.getFootPrint());
                 return ResponseEntity.noContent().build();
             }
             else {
@@ -469,7 +469,7 @@ public class FootprintController {
         }
     }
 
-    @PutMapping("storage")
+    @PostMapping("storage")
     public ResponseEntity<Void> updateStorage(@Valid @RequestBody GHGStorage ghgStorage, Principal principal){
         Optional<User> user = userDao.findUserEmail(principal.getName());
         if(user.isPresent()){
@@ -480,7 +480,23 @@ public class FootprintController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
 
+    @DeleteMapping("storage/{id}")
+    public ResponseEntity<Void> deleteStorage(@PathVariable("id") int userId, Principal principal){
+        Optional<User> user = userDao.findUserById(userId);
+        if(user.isPresent()) {
+            String authEmail = principal.getName();
+            String userEmail = user.get().getEmail();
+            if (!authEmail.equals(userEmail)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+               ghgStorageDao.deleteStorage(userId);
+                return ResponseEntity.noContent().build();
+            }
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

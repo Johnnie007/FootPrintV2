@@ -114,8 +114,8 @@ public class DaoTest {
         user.setLifeStyle("HomeBody");
 
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(),Mockito.anyString(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyInt())).thenReturn(1);
-        int updateUser = userDao.updateUser(user.getId(),user);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+        int updateUser = userDao.updateUser(user.getId(),user.getFootPrint());
 
         Assertions.assertEquals(1,updateUser);
     }
