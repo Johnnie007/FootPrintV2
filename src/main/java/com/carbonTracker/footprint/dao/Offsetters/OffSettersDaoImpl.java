@@ -40,7 +40,7 @@ public class OffSettersDaoImpl implements OffSettersDao {
     @Override
     public int deleteOffSetter(int userId, OffSetters offSetters){
         String sql = """
-                DELETE FROM OffSetters
+                DELETE FROM offSetters
                 WHERE userId = ? and id = ?
                 """;
 
