@@ -33,12 +33,9 @@ public class User {
     private String password;
 
 
-    @JsonProperty("lifestyle")
-    private String lifeStyle;
 
-
-    @JsonProperty("footPrint")
-    private int footprint;
+    @JsonProperty("footprint")
+    private double footprint;
 
     public int getId(){
         return id;
@@ -80,20 +77,12 @@ public class User {
         this.password = password;
     }
 
-    public int  getFootPrint() {
+    public double  getFootPrint() {
         return footprint;
     }
 
-    public void setFootPrint(int footPrint) {
+    public void setFootPrint(double footPrint) {
         this.footprint = footPrint;
-    }
-
-    public String getLifeStyle() {
-        return lifeStyle;
-    }
-
-    public void setLifeStyle(String lifeStyle) {
-        this.lifeStyle = lifeStyle;
     }
 
     public String getMonth_joined() {
@@ -109,8 +98,7 @@ public class User {
         return "User{"+
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", lifestyle='" + lifeStyle + '\'' +
+                ", email='" + email + '\'' +'\'' +
                 ", footprint='" + footprint + '\'' +
                 '}';
     }

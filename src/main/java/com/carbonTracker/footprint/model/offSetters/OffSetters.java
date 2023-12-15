@@ -9,9 +9,6 @@ public class OffSetters {
     @JsonProperty("id")
     private int id;
 
-    @NotBlank
-    @JsonProperty
-    private String month_added;
 
     @NotBlank
     @JsonProperty("type")
@@ -64,14 +61,6 @@ public class OffSetters {
 
     public void setUserId(int userId){
         this.userId = userId;
-    }
-
-    public String getMonth_added() {
-        return month_added;
-    }
-
-    public void setMonth_added(String month_added) {
-        this.month_added = month_added;
     }
 
 }

@@ -14,7 +14,7 @@ public class VehicleRowMapper implements RowMapper <Vehicle> {
                 vehicle.setId(rs.getInt("id"));
                 vehicle.setType(rs.getString("type"));
                 vehicle.setMpg(rs.getString("mpg"));
-                vehicle.setVehicleGHG(rs.getInt("vehicleGHG"));
+                vehicle.setVehicleGHG(rs.getDouble("vehicleGHG"));
                 vehicle.setUserId(rs.getInt("userId"));
         return vehicle;
     }

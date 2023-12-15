@@ -111,10 +111,9 @@ public class DaoTest {
         user.setEmail("Testing@test.com");
         user.setFootPrint(293);
         user.setPassword("123");
-        user.setLifeStyle("HomeBody");
 
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(1);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyDouble(), Mockito.anyInt())).thenReturn(1);
         int updateUser = userDao.updateUser(user.getId(),user.getFootPrint());
 
         Assertions.assertEquals(1,updateUser);
@@ -265,7 +264,6 @@ public class DaoTest {
     public void getOffsetters(){
         OffSetters offSetters = new OffSetters();
         offSetters.setUserId(1);
-        offSetters.setMonth_added("Jan");
         offSetters.setCCS(200);
         offSetters.setProduct("Succulent");
         offSetters.setType("Plant");
@@ -284,12 +282,11 @@ public class DaoTest {
     public void addOffsetter(){
         OffSetters offSetters = new OffSetters();
         offSetters.setUserId(1);
-        offSetters.setMonth_added("Jan");
         offSetters.setCCS(200);
         offSetters.setProduct("Succulent");
         offSetters.setType("Plant");
 
-        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),Mockito.anyDouble(), Mockito.anyInt())).thenReturn(1);
+        Mockito.when(jdbcTemplate.update(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),Mockito.anyDouble(), Mockito.anyInt())).thenReturn(1);
 
         int addOffsetter = offSettersDao.addOffSetter(offSetters,offSetters.getUserId());
 

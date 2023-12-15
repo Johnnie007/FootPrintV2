@@ -33,8 +33,7 @@ public class FootprintMapper implements ResultSetExtractor {
                 user.setLastName(rs.getNString("last_name"));
                 user.setEmail(rs.getNString("email"));
                 user.setPassword(rs.getNString("password"));
-                user.setLifeStyle(rs.getNString("lifeStyle"));
-                user.setFootPrint(rs.getInt("footPrint"));
+                user.setFootPrint(rs.getDouble("footPrint"));
 
                 footprint.setUser(user);
                 map.put(id, footprint);;
@@ -65,7 +64,7 @@ public class FootprintMapper implements ResultSetExtractor {
                     home.setId(rs.getInt("h.id"));
                     home.setHomeType(rs.getNString("h.homeType"));
                     home.setHomeSize(rs.getInt("h.homeSize"));
-                    home.setHomeGHG(rs.getInt("h.homeGHG"));
+                    home.setHomeGHG(rs.getDouble("h.homeGHG"));
                     home.setUserId(rs.getInt("h.userId"));
 
                     if(home.getId() != 0) {
@@ -82,7 +81,7 @@ public class FootprintMapper implements ResultSetExtractor {
                     offSetters.setId(rs.getInt("o.id"));
                     offSetters.setType(rs.getNString("o.type"));
                     offSetters.setProduct(rs.getNString("o.product"));
-                    offSetters.setCCS(rs.getInt("o.CCS"));
+                    offSetters.setCCS(rs.getDouble("o.CCS"));
                     offSetters.setUserId(rs.getInt("userId"));
 
                     if(offSetters.getId() != 0) {
@@ -134,7 +133,7 @@ public class FootprintMapper implements ResultSetExtractor {
                 offSetter.setId(rs.getInt("o.id"));
                 offSetter.setType(rs.getNString("o.type"));
                 offSetter.setProduct(rs.getNString("o.product"));
-                offSetter.setCCS(rs.getInt("o.CCS"));
+                offSetter.setCCS(rs.getDouble("o.CCS"));
                 offSetter.setUserId(rs.getInt("userId"));
 
 

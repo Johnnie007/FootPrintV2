@@ -5,8 +5,7 @@ CREATE table user(
     last_name varChar(30),
     email varChar(20) UNIQUE,
     password varChar(255) not null,
-    footprint int(30),
-    lifeStyle varChar(40),
+    footprint DECIMAL(10, 2),
     primary key(id)
 );
 
@@ -14,7 +13,7 @@ CREATE TABLE vehicle(
     id int auto_increment,
     type varChar(10),
     mpg varChar(5),
-    vehicleGHG DECIMAL(10, 1),
+    vehicleGHG DECIMAL(10, 2),
     userId int,
     primary key(id),
     FOREIGN Key (userId)
@@ -25,7 +24,7 @@ CREATE TABLE home(
     id int auto_increment,
     homeType varChar(10),
     homeSize int,
-    homeGHG DECIMAL(10, 1),
+    homeGHG DECIMAL(10, 2),
     userId int,
     primary key(id),
     FOREIGN Key (userId)
@@ -37,16 +36,15 @@ CREATE TABLE recommendationList(
     type varChar(15),
     product varChar(30),
     productLocation varChar(30),
-    CCS DECIMAL(10, 1),
+    CCS DECIMAL(10, 2),
     primary key(id)
 );
 
 CREATE TABLE offSetters(
     id int auto_increment,
-     month_added varChar(10),
     type varChar(15),
     product varChar(30),
-    CCS DECIMAL(10, 1),
+    CCS DECIMAL(10, 2),
     userId int,
     primary key(id),
     FOREIGN Key (userId)
@@ -66,8 +64,8 @@ CREATE TABLE profileImage(
 
 CREATE TABLE GHGStorage(
     id int auto_increment,
-    vehicleTotal DECIMAL(10, 1),
-    homeTotal DECIMAL(10, 1),
+    vehicleTotal DECIMAL(10, 2),
+    homeTotal DECIMAL(10, 2),
     storageMonth varChar(10),
     userId int,
     primary key(id),

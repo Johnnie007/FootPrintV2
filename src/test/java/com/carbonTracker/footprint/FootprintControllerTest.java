@@ -473,7 +473,6 @@ public class FootprintControllerTest {
         Integer userId = JsonPath.read(responseGetUserByEmail.andReturn().getResponse().getContentAsString(), "$.id");
 
         OffSetters offSetters = new OffSetters();
-        offSetters.setMonth_added("Jan");
         offSetters.setType("Plant");
         offSetters.setCCS(5);
         offSetters.setProduct("Succulent");
@@ -551,7 +550,6 @@ public class FootprintControllerTest {
 
         OffSetters offSetters = new OffSetters();
         offSetters.setId(offSetterId);
-        offSetters.setMonth_added("Jan");
         offSetters.setType("type");
         offSetters.setCCS(5);
         offSetters.setProduct("Succulent");
