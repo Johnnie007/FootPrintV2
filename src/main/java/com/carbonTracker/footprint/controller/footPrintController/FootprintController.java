@@ -120,9 +120,6 @@ public class FootprintController {
         else {
             String authEmail = principal.getName();
             String userEmail = user.getEmail();
-            System.out.println(authEmail);
-            System.out.println(userEmail);
-            System.out.println(user.getFootPrint());
             if(userEmail.equals(authEmail)){
                 userDao.updateUser(id, user.getFootPrint());
                 return ResponseEntity.noContent().build();
